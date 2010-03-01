@@ -1,0 +1,11 @@
+steal.plugins('jquery/controller','jquery/controller/history',
+			  'jquery/view/ejs',
+			  'jquery/model',
+			  'jquery/lang/json',
+			  'jquery/dom/cookie'
+			  )
+     .resources('jsonp',
+	 			'highlight','languages/javascript','languages/www')
+     .models('favorites','search')
+     .controllers("documentation")
+     .views()
