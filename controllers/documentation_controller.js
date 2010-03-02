@@ -60,7 +60,8 @@ jQuery.Controller.extend('DocumentationController',
          this.showDoc(docData)
      },
      show : function(who, data){
-        this.who = {name: data.name, shortName: data.shortName, tag: data.name};
+        console.log(data)
+		this.who = {name: data.name, shortName: data.shortName, tag: data.name};
         data.isFavorite = Favorites.isFavorite(data);
         if(data.children && data.children.length){ //we have a class or constructor
 			this.selected.push(data);
@@ -147,7 +148,7 @@ jQuery.Controller.extend('DocumentationController',
         }
     },
 	".remove click" : function(el, ev){
-		ev.stopDelegation();
+		ev.stopImmediatePropagation();
 		this.selected.pop();
 		//fire to history
 		if(this.selected.length){
@@ -229,7 +230,7 @@ jQuery.Controller.extend('DocumentationController',
 				break;
 			}
 		}
-        
+        console.log("Requesting ", DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json")
         $.jsonp({
 			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
 			success: this.callback('show', who)
@@ -237,6 +238,7 @@ jQuery.Controller.extend('DocumentationController',
     },
 	"history.index subscribe" : function(called, data){
         console.log("history change ... :)", data)
+		
 		if(!this.searchReady){ //if search is not ready .. wait until it is
             this.loadHistoryData = data;
             return;
@@ -245,7 +247,13 @@ jQuery.Controller.extend('DocumentationController',
 	}
 }
 );
-
+var orderedParams = function(params){
+	var ordered = [];
+	for(var name in params){
+		ordered[params[name].order] = params[name]
+	}
+	return ordered;
+}
 
 DocumentationController.Helpers = {
 	calculateDisplay : function(previous, current){
@@ -296,7 +304,7 @@ DocumentationController.Helpers = {
         
        if(this._data.shortName == "constructor") name = "new "+name;
         
-        var ordered = this._data.params;
+        var ordered = orderedParams(this._data.params);
         for(var n = 0; n < ordered.length; n++){
             res.push(ordered[n].name)
         }
