@@ -8,4 +8,11 @@ steal.plugins('jquery/controller','jquery/controller/history',
 	 			'highlight','languages/javascript','languages/www')
      .models('favorites','search')
      .controllers("documentation")
-     .views()
+     .views('jmvcdoc/views/attribute.ejs',
+	 	    'jmvcdoc/views/class.ejs',
+			'jmvcdoc/views/constructor.ejs',
+			'jmvcdoc/views/favorite.ejs',
+			'jmvcdoc/views/function.ejs',
+			'jmvcdoc/views/page.ejs',
+			'jmvcdoc/views/results.ejs',
+			'jmvcdoc/views/top.ejs')

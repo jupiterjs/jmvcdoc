@@ -60,7 +60,6 @@ jQuery.Controller.extend('DocumentationController',
          this.showDoc(docData)
      },
      show : function(who, data){
-        console.log(data)
 		this.who = {name: data.name, shortName: data.shortName, tag: data.name};
         data.isFavorite = Favorites.isFavorite(data);
         if(data.children && data.children.length){ //we have a class or constructor
@@ -191,7 +190,7 @@ jQuery.Controller.extend('DocumentationController',
         $("#doc_container").height(wh-87);
     },
 	load : function(){
-		console.log("holler")
+
         this.windowresize();
         this.loaded = true;
         hljs.start();
@@ -201,7 +200,8 @@ jQuery.Controller.extend('DocumentationController',
         Search.load(this.callback('setSearchReady'));
     },
     setSearchReady : function(){
-        this.searchReady = true;
+
+		this.searchReady = true;
         //do what you would normally do
         $("#search").attr('disabled', false)
         $("#search").val(this.loadText)
@@ -210,7 +210,8 @@ jQuery.Controller.extend('DocumentationController',
         
     },
     handleHistoryChange : function(data){
-        if(data.search){
+
+		if(data.search){
             $("#search").val(data.search);
             this.searchCurrent();
             if(!data.who) return;
@@ -230,14 +231,14 @@ jQuery.Controller.extend('DocumentationController',
 				break;
 			}
 		}
-        console.log("Requesting ", DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json")
+
         $.jsonp({
 			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
 			success: this.callback('show', who)
 		});
     },
 	"history.index subscribe" : function(called, data){
-        console.log("history change ... :)", data)
+
 		
 		if(!this.searchReady){ //if search is not ready .. wait until it is
             this.loadHistoryData = data;
