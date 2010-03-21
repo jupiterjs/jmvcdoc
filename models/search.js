@@ -11,10 +11,13 @@ $.Class.extend('Search',
         return arguments;
     },
     find: function(val){
-        var level = 2;
+        var valWasEmpty, level = 2;
         var val = val.toLowerCase();
         
-        if(!val) val="home"; // return the core stuff
+        if (!val) {
+			val = "home"; // return the core stuff
+			valWasEmpty = true;
+		}
         
         if(val == "favorites")
 			return Favorites.findAll()
@@ -30,7 +33,7 @@ $.Class.extend('Search',
             //make sure everything in current is ok
             var lookedup = this.lookup(current.list);
             for(var i =0; i < lookedup.length; i++){
-                if(this.matches(lookedup[i],val) ) 
+                if(this.matches(lookedup[i],val, valWasEmpty) ) 
                     list.push(lookedup[i])
             }
         }else if(current){
@@ -38,8 +41,8 @@ $.Class.extend('Search',
         }
 		return list.sort(this.sortFn);
     },
-    matches : function(who, val){
-        if(who.name.toLowerCase().indexOf(val) > -1) return true;
+    matches : function(who, val, valWasEmpty){
+        if(!valWasEmpty && who.name.toLowerCase().indexOf(val) > -1) return true;
         if(who.tags){
             for(var t=0; t< who.tags.length; t++){
                  if(who.tags[t].toLowerCase().indexOf(val) > -1) return true;

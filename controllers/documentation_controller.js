@@ -1,4 +1,6 @@
 /**
+ * @tag home
+ * 
  * Runs the documentation
  */
 jQuery.Controller.extend('DocumentationController',
@@ -18,7 +20,7 @@ jQuery.Controller.extend('DocumentationController',
       * Searches with the current value in #search or searches for 'home'
       */
 	 searchCurrent : function(){
-         this.search( $('#search').val() || "home" );
+         this.search( $('#search').val() || "" );
      },
      /**
       * Searches for a value and puts results on the left hand side
@@ -80,7 +82,7 @@ jQuery.Controller.extend('DocumentationController',
             if($("#results a").length == 0){
                 //we should probably try to get first parent as result, but whatever ...
                 $("#left").html("//jmvcdoc/views/results.ejs",
-                                     {list: Search.find("home"), selected: this.selected, hide: false},
+                                     {list: Search.find(""), selected: this.selected, hide: false},
                                      DocumentationController.Helpers)
             }
 			$(".result").removeClass("picked")
@@ -271,7 +273,7 @@ DocumentationController.Helpers = {
                 break;
             }
         }
-		if(left_res.length == 1 && (left_res[0] == "jQuery" || left_res[0] == "include"))
+		if(left_res.length == 1 && (left_res[0] == "jQuery" || left_res[0] == "steal"))
 			return {
 				length : 1 , name: current
 			}
