@@ -14,7 +14,7 @@ $.Class.extend('Search',
         var valWasEmpty, level = 2;
         var val = val.toLowerCase();
         
-        if (!val) {
+        if (!val || val === "*") {
 			val = "home"; // return the core stuff
 			valWasEmpty = true;
 		}
