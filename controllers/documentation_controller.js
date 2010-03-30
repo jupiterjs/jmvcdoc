@@ -188,11 +188,15 @@ jQuery.Controller.extend('DocumentationController',
     },
 
 	load : function(){
-
+		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
 		this.find("#bottom").phui_filler();
-		this.find("#left").height("95%");
-		this.find("#doc_container").height("95%");
+		this.find("#bottom").bind("resize", function(){
+			var h = $(this).height();
+    		self.find("#left").height(h);
+	    	self.find("#doc_container").height(h);	
+		});	
+		
         this.loaded = true;
         hljs.start();
         this.loadText = $("#search").val();
