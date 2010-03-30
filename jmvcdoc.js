@@ -2,8 +2,9 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			  'jquery/view/ejs',
 			  'jquery/model',
 			  'jquery/lang/json',
-			  'jquery/dom/cookie'
-			  )
+			  'jquery/dom/cookie',
+			  
+			  'phui/filler')
      .resources('jsonp',
 	 			'highlight','languages/javascript','languages/www')
      .models('favorites','search')

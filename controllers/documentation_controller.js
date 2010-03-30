@@ -186,14 +186,13 @@ jQuery.Controller.extend('DocumentationController',
         if(!list.length)
             $('#doc').html("//jmvcdoc/views/favorite.ejs",{})
     },
-    windowresize : function(){
-        var wh = $(window).height()
-        $("#left").height(wh-87);
-        $("#doc_container").height(wh-87);
-    },
+
 	load : function(){
 
-        this.windowresize();
+		this.find("#documentation").phui_filler({parent: $(window)});
+		this.find("#bottom").phui_filler();
+		this.find("#left").height("95%");
+		this.find("#doc_container").height("95%");
         this.loaded = true;
         hljs.start();
         this.loadText = $("#search").val();
