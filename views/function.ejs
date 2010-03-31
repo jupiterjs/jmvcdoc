@@ -4,10 +4,8 @@
   
   <div class='params'>
   
-  
-  <% var ordered = this.params
-  	for(var n = 0; n < ordered.length; n++){   
-       var param = ordered[n]; %>  
+  <% for(var name in this.params){   
+       var param = this.params[name]; %>  
       <div class='param <%= param.optional ? "optional" : ""%>'>
           <label><%= param.name%></label>
           <code>{<%=(param.optional ? '' : '') +""+(param.type) %>}</code> - <%= (param.description) %>
