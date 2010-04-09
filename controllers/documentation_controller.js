@@ -202,6 +202,14 @@ jQuery.Controller.extend('DocumentationController',
     	$("#menu").find("a").click(function(){
 			$(this).closest("li").trigger("activate")
 		});
+		
+    	$("#menu").find("a").focus(function(){
+			$(this).closest("li").trigger("select")
+		});
+		$("#menu").find("a").keypress(function(ev){
+			if(ev.keyCode == 13 || ev.keyCode == 10)
+				$(this).closest("li").trigger("activate")
+		});		
 
 		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
