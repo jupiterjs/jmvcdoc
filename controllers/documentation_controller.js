@@ -188,7 +188,10 @@ jQuery.Controller.extend('DocumentationController',
     },
 
 	load : function(){
-		/*this.find("#menu").phui_menuable();*/
+		this.find("#menu").phui_menuable()
+		 .find("a").click(function(){
+				$(this).closest("li").trigger("select")
+			});
 		
 		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
