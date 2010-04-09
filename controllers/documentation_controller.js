@@ -188,6 +188,8 @@ jQuery.Controller.extend('DocumentationController',
     },
 
 	load : function(){
+		/*this.find("#menu").phui_menuable();*/
+		
 		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
 		this.find("#bottom").phui_filler();
@@ -239,7 +241,8 @@ jQuery.Controller.extend('DocumentationController',
 
         $.jsonp({
 			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: this.callback('show', who)
+			success: this.callback('show', who),
+			error: this.callback('whoNotFound', who)
 		});
     },
 	"history.index subscribe" : function(called, data){
@@ -250,7 +253,20 @@ jQuery.Controller.extend('DocumentationController',
             return;
         }
         this.handleHistoryChange(data)
-	}
+	},
+	whoNotFound : function(who) {
+		var parts = who.split(".");
+		parts.pop();
+		if(parts.length) {
+			who = parts.join(".");
+	        $.jsonp({
+				url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
+				success: this.callback('show', who),
+				error: this.callback('whoNotFound', who)
+			});			
+		}
+	} 
+	
 }
 );
 var orderedParams = function(params){
