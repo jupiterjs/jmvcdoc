@@ -5,6 +5,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			  'jquery/dom/cookie',
 			  
 			  'phui/filler',
+			  'phui/positionable',
 			  'phui/menuable')
      .resources('jsonp',
 	 			'highlight','languages/javascript','languages/www')
@@ -18,3 +19,6 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			'jmvcdoc/views/page.ejs',
 			'jmvcdoc/views/results.ejs',
 			'jmvcdoc/views/top.ejs')
+	.then(function(){
+
+	})

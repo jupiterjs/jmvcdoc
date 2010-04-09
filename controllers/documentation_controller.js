@@ -188,10 +188,27 @@ jQuery.Controller.extend('DocumentationController',
     },
 
 	load : function(){
-		this.find("#menu").phui_menuable()
+		/*this.find("#menu").phui_menuable()
 		 .find("a").click(function(){
 				$(this).closest("li").trigger("select")
+			});*/
+
+			//menu with focus
+			$("#menu").phui_menuable().find("ul").phui_menuable().hide()
+				.bind("show", function(){
+					$(this).show(function(){
+						$(this).trigger("show:after")
+					});
+				})
+				.bind("hide", function(){
+					$(this).hide(function(){
+						$(this).trigger("hide:after")
+					});
+				});
+        	$("#menu").find("a").click(function(){
+				$(this).closest("li").trigger("activate")
 			});
+
 		
 		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
