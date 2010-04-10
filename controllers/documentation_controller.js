@@ -188,7 +188,7 @@ jQuery.Controller.extend('DocumentationController',
     },
 
 	load : function(){
-		$("#menu").phui_menuable().find("ul").phui_menuable().hide()
+		/*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
 			.bind("show", function(){
 				$(this).show(function(){
 					$(this).trigger("show:after")
@@ -209,7 +209,7 @@ jQuery.Controller.extend('DocumentationController',
 		$("#menu").find("a").keypress(function(ev){
 			if(ev.keyCode == 13 || ev.keyCode == 10)
 				$(this).closest("li").trigger("activate")
-		});		
+		});*/		
 
 		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
