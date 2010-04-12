@@ -7,7 +7,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			  'phui/filler',
 			  'phui/positionable',
 			  'phui/menuable')
-     .resources('jsonp',
+     .resources(//'jsonp',
 	 			'highlight','languages/javascript','languages/www')
      .models('favorites','search')
      .controllers("documentation")

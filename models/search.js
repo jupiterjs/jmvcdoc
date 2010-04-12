@@ -1,13 +1,21 @@
 $.Class.extend('Search',
 {
     load : function(callback){
-        $.jsonp({
+        
+		$.ajax({
+			url: DOCS_LOCATION + "searchData.json",
+			success: this.callback(['setData', callback]),
+			jsonpCallback: "C",
+			dataType: "jsonp"
+		})
+		
+		/**$.jsonp({
 			url: DOCS_LOCATION + "searchData.json",
 			success: this.callback(['setData', callback])
-		});
+		});**/
     },
     setData : function(data){
-        this._data = data;
+		this._data = data;
         return arguments;
     },
     find: function(val){

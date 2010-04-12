@@ -260,10 +260,12 @@ jQuery.Controller.extend('DocumentationController',
 			}
 		}
 
-        $.jsonp({
+        $.ajax({
 			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
 			success: this.callback('show', who),
-			error: this.callback('whoNotFound', who)
+			error: this.callback('whoNotFound', who),
+			jsonpCallback: "C",
+			dataType: "jsonp"
 		});
     },
 	"history.index subscribe" : function(called, data){
@@ -280,10 +282,12 @@ jQuery.Controller.extend('DocumentationController',
 		parts.pop();
 		if(parts.length) {
 			who = parts.join(".");
-	        $.jsonp({
+	        $.ajax({
 				url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
 				success: this.callback('show', who),
-				error: this.callback('whoNotFound', who)
+				error: this.callback('whoNotFound', who),
+				jsonpCallback: "C",
+				dataType: "jsonp"
 			});			
 		}
 	} 
