@@ -53,7 +53,38 @@ jQuery.Controller.extend('DocumentationController',
                  DocumentationController.Helpers.link("["+names.sort(Search.sortJustStrings).join("]<br/>[")+"]" , true )   
              )
          }
+		 var $iframe = $("iframe");
+		 var $iframe_wrapper = $(".iframe_wrapper");
+		 if($iframe.length) {
+			var scripts = []; 
+			$iframe
+			 .bind('load', function(){ $('script', this.contentWindow.document).each(function(i, script){
+		        if(script.src)scripts.push(script); })  
+				if(scripts.length > 0) $iframe_wrapper.prepend("//jmvcdoc/views/scripts_menu.ejs", {
+					'scripts': scripts
+				});
+				$(".scripts-menu").phui_menuable().find("ul").phui_menuable().hide()
+							.bind("show", function(){
+								$(this).show(function(){
+									$(this).trigger("show:after")
+								});
+							})
+							.bind("hide", function(){
+								$(this).hide(function(){
+									$(this).trigger("hide:after")
+								});
+							});
+		    	$(".scripts-menu").find("a").click(function(){
+					$(this).closest("li").trigger("activate")
+				});
+			  });
+		 }
+		 
      },
+	 '.scripts-sub-menu li a click': function(el, ev){
+	 	var src = el.html();
+	 	window.open(src, src);
+	 },
      showResultsAndDoc : function(searchResultsData, docData){
          $("#left").html("//jmvcdoc/views/results.ejs",
                                      searchResultsData,

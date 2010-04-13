@@ -1,0 +1,11 @@
+<ul class="scripts-menu">
+	<li class="scripts-menu-item close"><a href="javascript://">[X]</a></li>		
+	<li class="scripts-menu-item"><a href="javascript://">Scripts</a>
+		<ul class="scripts-menu scripts-sub-menu">
+		<% for(var s=0;s<scripts.length;s++) {
+		   var script = scripts[s]; %>
+		    <li><a href="javascript://"><%= script.src %></a></li>
+		<% } %>
+		</ul>
+	</li>
+</ul>
