@@ -54,7 +54,6 @@ jQuery.Controller.extend('DocumentationController',
              )
          }
 		 var $iframe = $("iframe");
-		 var $iframe_wrapper = $(".iframe_wrapper");
 		 var $scriptsMenuButton = $(".scripts_menu_button"); 
 		 if($iframe.length) {
 			var scripts = []; 
@@ -71,7 +70,7 @@ jQuery.Controller.extend('DocumentationController',
 				$scriptsMenu.phui_positionable({
 					my: 'right top',
 					at: 'right top',
-					offset: '20'
+					offset: '10'
 				}).trigger('move', $scriptsMenuButton);
 				/*$scriptsMenu.find("ul").phui_menuable().hide()
 							.bind("show", function(){
@@ -87,16 +86,26 @@ jQuery.Controller.extend('DocumentationController',
 				$scriptsMenu.find("ul").hide();
 		    	$scriptsMenuButton.click(function(){
 					$scriptsMenu.find("ul").toggle()
-				});
+				});		
 				
 			  });
 		 }
 		 
      },
+	 
+	 positionScriptsMenu: function() {
+		$(".scripts_menu_wrapper").trigger('move', $(".scripts_menu_button"));	 	
+	 },
+	 
 	 '.scripts_menu_item a click': function(el, ev){
 	 	var src = el.html();
 	 	window.open(src, src);
 	 },
+	 
+	 windowresize:function(el, ev) {
+	 	this.positionScriptsMenu();
+	 },
+	 	 
      showResultsAndDoc : function(searchResultsData, docData){
          $("#left").html("//jmvcdoc/views/results.ejs",
                                      searchResultsData,

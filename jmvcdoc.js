@@ -18,7 +18,8 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			'jmvcdoc/views/function.ejs',
 			'jmvcdoc/views/page.ejs',
 			'jmvcdoc/views/results.ejs',
-			'jmvcdoc/views/top.ejs')
+			'jmvcdoc/views/top.ejs',
+			'jmvcdoc/views/scripts_menu.ejs')
 	.then(function(){
 
 	})
