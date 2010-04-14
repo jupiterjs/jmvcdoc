@@ -55,15 +55,25 @@ jQuery.Controller.extend('DocumentationController',
          }
 		 var $iframe = $("iframe");
 		 var $iframe_wrapper = $(".iframe_wrapper");
+		 var $scriptsMenuButton = $(".scripts_menu_button"); 
 		 if($iframe.length) {
 			var scripts = []; 
 			$iframe
 			 .bind('load', function(){ $('script', this.contentWindow.document).each(function(i, script){
-		        if(script.src)scripts.push(script); })  
-				if(scripts.length > 0) $iframe_wrapper.prepend("//jmvcdoc/views/scripts_menu.ejs", {
-					'scripts': scripts
+		        if(!script.text.match(/steal.end()/)) scripts.push(script); })  
+
+				if(scripts.length > 0) $scriptsMenuButton.after("//jmvcdoc/views/scripts_menu.ejs", {
+					'scripts': scripts,
+					'iframeWindow': this.contentWindow
 				});
-				$(".scripts-menu").phui_menuable().find("ul").phui_menuable().hide()
+				
+				var $scriptsMenu = $(".scripts_menu_wrapper");			
+				$scriptsMenu.phui_positionable({
+					my: 'right top',
+					at: 'right top',
+					offset: '20'
+				}).trigger('move', $scriptsMenuButton);
+				/*$scriptsMenu.find("ul").phui_menuable().hide()
 							.bind("show", function(){
 								$(this).show(function(){
 									$(this).trigger("show:after")
@@ -73,15 +83,17 @@ jQuery.Controller.extend('DocumentationController',
 								$(this).hide(function(){
 									$(this).trigger("hide:after")
 								});
-							});
-		    	$(".scripts-menu").find("a").click(function(){
-					$(this).closest("li").trigger("activate")
+							});*/
+				$scriptsMenu.find("ul").hide();
+		    	$scriptsMenuButton.click(function(){
+					$scriptsMenu.find("ul").toggle()
 				});
+				
 			  });
 		 }
 		 
      },
-	 '.scripts-sub-menu li a click': function(el, ev){
+	 '.scripts_menu_item a click': function(el, ev){
 	 	var src = el.html();
 	 	window.open(src, src);
 	 },
