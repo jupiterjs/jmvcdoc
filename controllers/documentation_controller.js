@@ -355,6 +355,7 @@ var orderedParams = function(params){
 }
 
 DocumentationController.Helpers = {
+	previousIndent: 0,
 	calculateDisplay : function(previous, current){
 
 		var t = current.split(/\./)
@@ -373,8 +374,12 @@ DocumentationController.Helpers = {
 			return {
 				length : 1 , name: current
 			}
+		
+		if(this.indentAdjust === undefined) this.indentAdjust =  !!(left_res.length) ? 0 : 1;
+		var newIndent = left_res.length < 2 ? left_res.length + this.indentAdjust : left_res.length;
+		
 		return  {
-			length: left_res.length ? left_res.length : 1, name: right_res.join(".")
+			length: newIndent, name: right_res.join(".")
 		}
 	},
     linkTags : function(tags){
