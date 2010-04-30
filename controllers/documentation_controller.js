@@ -239,7 +239,7 @@ jQuery.Controller.extend('DocumentationController',
             $('#doc').html("//jmvcdoc/views/favorite.ejs",{})
     },
 
-	load : function(){
+	ready : function(){
 		/*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
 			.bind("show", function(){
 				$(this).show(function(){
@@ -275,22 +275,25 @@ jQuery.Controller.extend('DocumentationController',
         this.loaded = true;
         hljs.start();
         this.loadText = $("#search").val();
-        
+		
         $("#search").val("Loading ...")
         Search.load(this.callback('setSearchReady'));
     },
     setSearchReady : function(){
-
 		this.searchReady = true;
         //do what you would normally do
         $("#search").attr('disabled', false)
-        $("#search").val(this.loadText)
-        this.handleHistoryChange(this.loadHistoryData);
-        $("#search").focus();
-        
+        $("#search").val(this.loadText);
+		
+		var self = this;
+        setTimeout(function(){
+		    self.handleHistoryChange(self.loadHistoryData);
+            $("#search").focus();				
+		},1000);        
     },
+	
     handleHistoryChange : function(data){
-
+		
 		if(data.search){
             $("#search").val(data.search);
             this.searchCurrent();
@@ -320,6 +323,7 @@ jQuery.Controller.extend('DocumentationController',
 			dataType: "jsonp"
 		});
     },
+	
 	"history.index subscribe" : function(called, data){
 
 		
