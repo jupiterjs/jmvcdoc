@@ -72,17 +72,7 @@ jQuery.Controller.extend('DocumentationController',
 					at: 'right top',
 					offset: '10'
 				}).trigger('move', $scriptsMenuButton);
-				/*$scriptsMenu.find("ul").phui_menuable().hide()
-							.bind("show", function(){
-								$(this).show(function(){
-									$(this).trigger("show:after")
-								});
-							})
-							.bind("hide", function(){
-								$(this).hide(function(){
-									$(this).trigger("hide:after")
-								});
-							});*/
+
 				$scriptsMenu.find("ul").hide();
 		    	$scriptsMenuButton.click(function(){
 					$scriptsMenu.find("ul").toggle()
@@ -240,28 +230,7 @@ jQuery.Controller.extend('DocumentationController',
     },
 
 	ready : function(){
-		/*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
-			.bind("show", function(){
-				$(this).show(function(){
-					$(this).trigger("show:after")
-				});
-			})
-			.bind("hide", function(){
-				$(this).hide(function(){
-					$(this).trigger("hide:after")
-				});
-			});
-    	$("#menu").find("a").click(function(){
-			$(this).closest("li").trigger("activate")
-		});
-		
-    	$("#menu").find("a").focus(function(){
-			$(this).closest("li").trigger("select")
-		});
-		$("#menu").find("a").keypress(function(ev){
-			if(ev.keyCode == 13 || ev.keyCode == 10)
-				$(this).closest("li").trigger("activate")
-		});*/		
+				
 
 		var self = this;
 		this.find("#documentation").phui_filler({parent: $(window)});
@@ -283,17 +252,18 @@ jQuery.Controller.extend('DocumentationController',
 		this.searchReady = true;
         //do what you would normally do
         $("#search").attr('disabled', false)
-        $("#search").val(this.loadText);
-		
-		var self = this;
-        setTimeout(function(){
-		    self.handleHistoryChange(self.loadHistoryData);
-            $("#search").focus();				
-		},1000);        
+        $("#search").val(this.loadText).focus();
+		if(this.loadHistoryData){
+			//need a timeout to allow reset of C function
+			//by jQuery
+			var self= this;
+			setTimeout(function(){
+				self.handleHistoryChange(self.loadHistoryData);
+			},1)
+		}        
     },
 	
     handleHistoryChange : function(data){
-		
 		if(data.search){
             $("#search").val(data.search);
             this.searchCurrent();
@@ -323,9 +293,10 @@ jQuery.Controller.extend('DocumentationController',
 			dataType: "jsonp"
 		});
     },
-	
+	/**
+	 * A history event.  Only want to act if search data is available.
+	 */
 	"history.index subscribe" : function(called, data){
-
 		
 		if(!this.searchReady){ //if search is not ready .. wait until it is
             this.loadHistoryData = data;
