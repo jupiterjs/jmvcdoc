@@ -16,5 +16,15 @@ jQuery.Controller.extend('IframeScriptsController',
 	 
      windowresize:function(el, ev) {
          $(".iframe_menu_wrapper").trigger('move', $(".iframe_menu_button"));
-     }	 
+     },
+	 
+	 ".iframe_menu_item a mouseenter": function(el, ev){
+	 	el.css("background-color","blue");
+		el.css("color","white");
+	 },
+	 
+	 ".iframe_menu_item a mouseleave": function(el, ev){
+	 	el.css("background-color","");
+		el.css("color","");	 	
+	 }	 
 });

@@ -447,10 +447,17 @@ DocumentationController.Helpers = {
         })
     },
 	
-	humanizeUrl : function(url) {
+	shortenUrl : function(url) {
 		url = url.href ? url.href : url;
         var parts = url.match(/(https?:\/\/|file:\/\/)[^\/]*\/(.*)/);
 		return url = parts[2] ? parts[2] : url;
+	},
+	
+	normalizeUrl : function(url) {
+		var domain = new steal.File(window.location.href).domain();
+		if(url.test(/^\//))
+		    url = new steal.File(url.joinFrom(new steal.File(domain)))
+		return url
 	}
 }
 

@@ -2,7 +2,7 @@
 	<ul class="iframe_menu">		
 	    <li class="iframe_menu_item">
 			<a href="javascript://" data-src="<%= iframeWindow.location %>.js">
-    		    <%= humanizeUrl(iframeWindow.location) %>
+    		    <%= shortenUrl(iframeWindow.location) %>
 		    </a>
 		</li>					
 	<% for(var s=0;s<scripts.length;s++) {
@@ -10,7 +10,7 @@
 	    <li class="iframe_menu_item">
 	    	<% if(script.src) { %>
     			<a href="javascript://"  data-src="<%= script.src %>">
-	    		    <%= humanizeUrl(script.src) %>
+	    		    <%= shortenUrl(script.src) %>
 		    <% } %>
 		    </a>
 		</li>	
