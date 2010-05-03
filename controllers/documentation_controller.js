@@ -274,6 +274,7 @@ jQuery.Controller.extend('DocumentationController',
             $('#doc').html("//jmvcdoc/views/favorite.ejs",{})
     },
 
+<<<<<<< HEAD
     ready : function(){
         /*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
             .bind("show", function(){
@@ -297,6 +298,10 @@ jQuery.Controller.extend('DocumentationController',
             if(ev.keyCode == 13 || ev.keyCode == 10)
                 $(this).closest("li").trigger("activate")
         });*/        
+=======
+	ready : function(){
+				
+>>>>>>> ba3600ff97dc375afddf3134da1a3f208c952cba
 
         var self = this;
         this.find("#documentation").phui_filler({parent: $(window)});
@@ -312,12 +317,13 @@ jQuery.Controller.extend('DocumentationController',
         this.loadText = $("#search").val();
         
         $("#search").val("Loading ...")
-        Search.load(this.callback('setSearchReady'));
+		Search.load(this.callback('setSearchReady'));
     },
     setSearchReady : function(){
         this.searchReady = true;
         //do what you would normally do
         $("#search").attr('disabled', false)
+<<<<<<< HEAD
         $("#search").val(this.loadText);
         
         var self = this;
@@ -325,11 +331,26 @@ jQuery.Controller.extend('DocumentationController',
             self.handleHistoryChange(self.loadHistoryData);
             $("#search").focus();                
         },1000);        
+=======
+        $("#search").val(this.loadText).focus();
+		if(this.loadHistoryData){
+			//need a timeout to allow reset of C function
+			//by jQuery
+			var self= this;
+			setTimeout(function(){
+				self.handleHistoryChange(self.loadHistoryData);
+			},1)
+		}        
+>>>>>>> ba3600ff97dc375afddf3134da1a3f208c952cba
     },
     
     handleHistoryChange : function(data){
+<<<<<<< HEAD
         
         if(data.search){
+=======
+		if(data.search){
+>>>>>>> ba3600ff97dc375afddf3134da1a3f208c952cba
             $("#search").val(data.search);
             this.searchCurrent();
             if(!data.who) return;
@@ -358,12 +379,22 @@ jQuery.Controller.extend('DocumentationController',
             dataType: "jsonp"
         });
     },
+<<<<<<< HEAD
     
     "history.index subscribe" : function(called, data){
 
         
         if(!this.searchReady){ //if search is not ready .. wait until it is
             this.loadHistoryData = data;
+=======
+	/**
+	 * A history event.  Only want to act if search data is available.
+	 */
+	"history.index subscribe" : function(called, data){
+		
+		if(!this.searchReady){ //if search is not ready .. wait until it is
+			this.loadHistoryData = data;
+>>>>>>> ba3600ff97dc375afddf3134da1a3f208c952cba
             return;
         }
         this.handleHistoryChange(data)
