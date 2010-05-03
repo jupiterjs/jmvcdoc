@@ -69,7 +69,7 @@ jQuery.Controller.extend('DocumentationController',
 				var $scriptsMenu = $(".scripts_menu_wrapper");			
 				$scriptsMenu.phui_positionable({
 					my: 'right top',
-					at: 'right top',
+					at: 'right bottom',
 					offset: '10'
 				}).trigger('move', $scriptsMenuButton);
 				/*$scriptsMenu.find("ul").phui_menuable().hide()
