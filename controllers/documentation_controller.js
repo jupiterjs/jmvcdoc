@@ -55,46 +55,12 @@ jQuery.Controller.extend('DocumentationController',
          }
          
          var $iframe = $("iframe");
-         if($iframe.length) this.hookupIframeUI();
-         
-         /*var $iframe = $("iframe");
-         var $scriptsMenuButton = $(".scripts_menu_button"); 
-         if($iframe.length) {
-            var scripts = []; 
-            $iframe
-             .bind('load', function(){ $('script', this.contentWindow.document).each(function(i, script){
-                if(!script.text.match(/steal.end()/)) scripts.push(script); })  
-
-                if(scripts.length > 0) $scriptsMenuButton.after("//jmvcdoc/views/scripts_menu.ejs", {
-                    'scripts': scripts,
-                    'iframeWindow': this.contentWindow
-                });
-                
-                var $scriptsMenu = $(".scripts_menu_wrapper");            
-                $scriptsMenu.phui_positionable({
-                    my: 'right top',
-                    at: 'right top',
-                    offset: '10'
-                }).trigger('move', $scriptsMenuButton);*/
-                /*$scriptsMenu.find("ul").phui_menuable().hide()
-                            .bind("show", function(){
-                                $(this).show(function(){
-                                    $(this).trigger("show:after")
-                                });
-                            })
-                            .bind("hide", function(){
-                                $(this).hide(function(){
-                                    $(this).trigger("hide:after")
-                                });
-                            });*/
-                /*$scriptsMenu.find("ul").hide();
-                $scriptsMenuButton.click(function(){
-                    $scriptsMenu.find("ul").toggle()
-                });        
-                
-              });
-         }*/
-         
+         if ($iframe.length) {
+		 	this.hookupIframeUI();
+		 } else {
+		 	// cleanup iframe menu when navigating to another page
+		 	if($(".iframe_menu_wrapper").length) $(".iframe_menu_wrapper").remove();
+		 }
      },
 
      ".iframe_menu_button click" : function(el, ev) {
