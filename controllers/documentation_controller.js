@@ -72,7 +72,17 @@ jQuery.Controller.extend('DocumentationController',
 					at: 'right top',
 					offset: '10'
 				}).trigger('move', $scriptsMenuButton);
-
+				/*$scriptsMenu.find("ul").phui_menuable().hide()
+							.bind("show", function(){
+								$(this).show(function(){
+									$(this).trigger("show:after")
+								});
+							})
+							.bind("hide", function(){
+								$(this).hide(function(){
+									$(this).trigger("hide:after")
+								});
+							});*/
 				$scriptsMenu.find("ul").hide();
 		    	$scriptsMenuButton.click(function(){
 					$scriptsMenu.find("ul").toggle()
@@ -246,7 +256,7 @@ jQuery.Controller.extend('DocumentationController',
         this.loadText = $("#search").val();
 		
         $("#search").val("Loading ...")
-        Search.load(this.callback('setSearchReady'));
+		Search.load(this.callback('setSearchReady'));
     },
     setSearchReady : function(){
 		this.searchReady = true;
@@ -299,7 +309,7 @@ jQuery.Controller.extend('DocumentationController',
 	"history.index subscribe" : function(called, data){
 		
 		if(!this.searchReady){ //if search is not ready .. wait until it is
-            this.loadHistoryData = data;
+			this.loadHistoryData = data;
             return;
         }
         this.handleHistoryChange(data)
