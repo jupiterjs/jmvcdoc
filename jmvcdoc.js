@@ -10,7 +10,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
      .resources(//'jsonp',
 	 			'highlight','languages/javascript','languages/www')
      .models('favorites','search')
-     .controllers("documentation")
+     .controllers("documentation","iframe_scripts")
      .views('//jmvcdoc/views/attribute.ejs',
 	 	    '//jmvcdoc/views/class.ejs',
 			'//jmvcdoc/views/constructor.ejs',

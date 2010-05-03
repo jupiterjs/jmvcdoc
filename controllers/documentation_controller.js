@@ -14,12 +14,12 @@ jQuery.Controller.extend('DocumentationController',
       * Keeps track of who is selected
       */
      init : function(){
-		this.selected = [];
-	 },
+        this.selected = [];
+     },
      /**
       * Searches with the current value in #search or searches for 'home'
       */
-	 searchCurrent : function(){
+     searchCurrent : function(){
          this.search( $('#search').val() || "" );
      },
      /**
@@ -53,59 +53,94 @@ jQuery.Controller.extend('DocumentationController',
                  DocumentationController.Helpers.link("["+names.sort(Search.sortJustStrings).join("]<br/>[")+"]" , true )   
              )
          }
-		 var $iframe = $("iframe");
-		 var $scriptsMenuButton = $(".scripts_menu_button"); 
-		 if($iframe.length) {
-			var scripts = []; 
-			$iframe
-			 .bind('load', function(){ $('script', this.contentWindow.document).each(function(i, script){
-		        if(!script.text.match(/steal.end()/)) scripts.push(script); })  
+         
+         var $iframe = $("iframe");
+         if($iframe.length) this.hookupIframeUI();
+         
+         /*var $iframe = $("iframe");
+         var $scriptsMenuButton = $(".scripts_menu_button"); 
+         if($iframe.length) {
+            var scripts = []; 
+            $iframe
+             .bind('load', function(){ $('script', this.contentWindow.document).each(function(i, script){
+                if(!script.text.match(/steal.end()/)) scripts.push(script); })  
 
-				if(scripts.length > 0) $scriptsMenuButton.after("//jmvcdoc/views/scripts_menu.ejs", {
-					'scripts': scripts,
-					'iframeWindow': this.contentWindow
-				});
-				
-				var $scriptsMenu = $(".scripts_menu_wrapper");			
-				$scriptsMenu.phui_positionable({
-					my: 'right top',
-					at: 'right top',
-					offset: '10'
-				}).trigger('move', $scriptsMenuButton);
-				/*$scriptsMenu.find("ul").phui_menuable().hide()
-							.bind("show", function(){
-								$(this).show(function(){
-									$(this).trigger("show:after")
-								});
-							})
-							.bind("hide", function(){
-								$(this).hide(function(){
-									$(this).trigger("hide:after")
-								});
-							});*/
-				$scriptsMenu.find("ul").hide();
-		    	$scriptsMenuButton.click(function(){
-					$scriptsMenu.find("ul").toggle()
-				});		
-				
-			  });
-		 }
-		 
+                if(scripts.length > 0) $scriptsMenuButton.after("//jmvcdoc/views/scripts_menu.ejs", {
+                    'scripts': scripts,
+                    'iframeWindow': this.contentWindow
+                });
+                
+                var $scriptsMenu = $(".scripts_menu_wrapper");            
+                $scriptsMenu.phui_positionable({
+                    my: 'right top',
+                    at: 'right top',
+                    offset: '10'
+                }).trigger('move', $scriptsMenuButton);*/
+                /*$scriptsMenu.find("ul").phui_menuable().hide()
+                            .bind("show", function(){
+                                $(this).show(function(){
+                                    $(this).trigger("show:after")
+                                });
+                            })
+                            .bind("hide", function(){
+                                $(this).hide(function(){
+                                    $(this).trigger("hide:after")
+                                });
+                            });*/
+                /*$scriptsMenu.find("ul").hide();
+                $scriptsMenuButton.click(function(){
+                    $scriptsMenu.find("ul").toggle()
+                });        
+                
+              });
+         }*/
+         
      },
-	 
-	 positionScriptsMenu: function() {
-		$(".scripts_menu_wrapper").trigger('move', $(".scripts_menu_button"));	 	
-	 },
-	 
-	 '.scripts_menu_item a click': function(el, ev){
-	 	var src = el.html();
-	 	window.open(src, src);
-	 },
-	 
-	 windowresize:function(el, ev) {
-	 	this.positionScriptsMenu();
-	 },
-	 	 
+
+     ".iframe_menu_button click" : function(el, ev) {
+            var $iframe = $("iframe");
+            var id = this.toId($iframe.attr("src"));
+            var scripts = this.iframesCache[id];
+            if (scripts && scripts.length > 0) {
+                var $iframeMenuWrapper = $( this.find(".iframe_menu_wrapper")[0] );
+                if (!$iframeMenuWrapper.length) {
+                    el.after("//jmvcdoc/views/iframe_menu.ejs", {
+                        'scripts': scripts,
+                        'iframeWindow': $iframe[0].contentWindow
+                    }, DocumentationController.Helpers);
+                    
+                    $iframeMenuWrapper = $( this.find(".iframe_menu_wrapper")[0] );                    
+                    $iframeMenuWrapper.phui_positionable({
+                        my: 'right top',
+                        at: 'right bottom'
+                    }).trigger('move', el);
+					
+					$iframeMenuWrapper.iframe_scripts();
+                } else {
+                    $iframeMenuWrapper.slideToggle("slow");
+                }
+                
+            }      
+     },
+     
+     toId : function(src){
+        return src.replace(/[\/\.]/g,"_")
+     },     
+     
+     hookupIframeUI : function() {
+         var self = this,
+            $iframe = $("iframe"),
+            scripts = [];
+                     
+         $iframe.bind('load', function(){ $('script', $iframe[0].contentWindow.document)
+            .each(function(i, script){
+                if(!script.text.match(/steal.end()/)) scripts.push(script);
+            }); 
+            if(!self.iframesCache) self.iframesCache = {};
+            self.iframesCache[ self.toId($iframe.attr("src")) ] = scripts;              
+         });           
+     },
+          
      showResultsAndDoc : function(searchResultsData, docData){
          $("#left").html("//jmvcdoc/views/results.ejs",
                                      searchResultsData,
@@ -114,34 +149,34 @@ jQuery.Controller.extend('DocumentationController',
          this.showDoc(docData)
      },
      show : function(who, data){
-		this.who = {name: data.name, shortName: data.shortName, tag: data.name};
+        this.who = {name: data.name, shortName: data.shortName, tag: data.name};
         data.isFavorite = Favorites.isFavorite(data);
         if(data.children && data.children.length){ //we have a class or constructor
-			this.selected.push(data);
-			var list = $.makeArray(data.children).sort(Search.sortFn)
-			var self = this;
-			var results = $("#results");
-			if(results.length){
-				$("#results").slideUp("fast",
+            this.selected.push(data);
+            var list = $.makeArray(data.children).sort(Search.sortFn)
+            var self = this;
+            var results = $("#results");
+            if(results.length){
+                $("#results").slideUp("fast",
                     this.callback(  "showResultsAndDoc",
                                     {list: list, selected: this.selected, hide: true}, 
                                     data));
-			}else{
-				this.showResultsAndDoc({list: list, selected: this.selected, hide: true}, data)
-			}
-		}else{ //we have a function or attribute
-			//see if we can pick it
+            }else{
+                this.showResultsAndDoc({list: list, selected: this.selected, hide: true}, data)
+            }
+        }else{ //we have a function or attribute
+            //see if we can pick it
             if($("#results a").length == 0){
                 //we should probably try to get first parent as result, but whatever ...
                 $("#left").html("//jmvcdoc/views/results.ejs",
                                      {list: Search.find(""), selected: this.selected, hide: false},
                                      DocumentationController.Helpers)
             }
-			$(".result").removeClass("picked")
-			$(".result[href=#&who="+who+"]").addClass("picked").focus()
+            $(".result").removeClass("picked")
+            $(".result[href=#&who="+who+"]").addClass("picked").focus()
             this.showDoc(data)
 
-		}
+        }
             
     },
     //event handlers
@@ -200,24 +235,24 @@ jQuery.Controller.extend('DocumentationController',
             ev.preventDefault();
         }
     },
-	".remove click" : function(el, ev){
-		ev.stopImmediatePropagation();
-		this.selected.pop();
-		//fire to history
-		if(this.selected.length){
-			var who = this.selected.pop().name;
-			$("#results").slideUp("fast", function(){
-				window.location.hash = "#&who="+who;
-			})
-			
-			///$.get("docs/classes/"+who+".json", {},this.callback('show', who),'json');
-		}else{
-			var self = this;
-			$("#results").slideUp("fast", function(){
-				window.location.hash = "#"
-			})
-		}
-	},
+    ".remove click" : function(el, ev){
+        ev.stopImmediatePropagation();
+        this.selected.pop();
+        //fire to history
+        if(this.selected.length){
+            var who = this.selected.pop().name;
+            $("#results").slideUp("fast", function(){
+                window.location.hash = "#&who="+who;
+            })
+            
+            ///$.get("docs/classes/"+who+".json", {},this.callback('show', who),'json');
+        }else{
+            var self = this;
+            $("#results").slideUp("fast", function(){
+                window.location.hash = "#"
+            })
+        }
+    },
     ".favorite click" : function(el){
         var isFavorite = Favorites.toggle(this.who)
         if(isFavorite){
@@ -239,130 +274,130 @@ jQuery.Controller.extend('DocumentationController',
             $('#doc').html("//jmvcdoc/views/favorite.ejs",{})
     },
 
-	ready : function(){
-		/*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
-			.bind("show", function(){
-				$(this).show(function(){
-					$(this).trigger("show:after")
-				});
-			})
-			.bind("hide", function(){
-				$(this).hide(function(){
-					$(this).trigger("hide:after")
-				});
-			});
-    	$("#menu").find("a").click(function(){
-			$(this).closest("li").trigger("activate")
-		});
-		
-    	$("#menu").find("a").focus(function(){
-			$(this).closest("li").trigger("select")
-		});
-		$("#menu").find("a").keypress(function(ev){
-			if(ev.keyCode == 13 || ev.keyCode == 10)
-				$(this).closest("li").trigger("activate")
-		});*/		
+    ready : function(){
+        /*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
+            .bind("show", function(){
+                $(this).show(function(){
+                    $(this).trigger("show:after")
+                });
+            })
+            .bind("hide", function(){
+                $(this).hide(function(){
+                    $(this).trigger("hide:after")
+                });
+            });
+        $("#menu").find("a").click(function(){
+            $(this).closest("li").trigger("activate")
+        });
+        
+        $("#menu").find("a").focus(function(){
+            $(this).closest("li").trigger("select")
+        });
+        $("#menu").find("a").keypress(function(ev){
+            if(ev.keyCode == 13 || ev.keyCode == 10)
+                $(this).closest("li").trigger("activate")
+        });*/        
 
-		var self = this;
-		this.find("#documentation").phui_filler({parent: $(window)});
-		this.find("#bottom").phui_filler();
-		this.find("#bottom").bind("resize", function(){
-			var h = $(this).height();
-    		self.find("#left").height(h);
-	    	self.find("#doc_container").height(h);	
-		});	
-		
+        var self = this;
+        this.find("#documentation").phui_filler({parent: $(window)});
+        this.find("#bottom").phui_filler();
+        this.find("#bottom").bind("resize", function(){
+            var h = $(this).height();
+            self.find("#left").height(h);
+            self.find("#doc_container").height(h);    
+        });    
+        
         this.loaded = true;
         hljs.start();
         this.loadText = $("#search").val();
-		
+        
         $("#search").val("Loading ...")
         Search.load(this.callback('setSearchReady'));
     },
     setSearchReady : function(){
-		this.searchReady = true;
+        this.searchReady = true;
         //do what you would normally do
         $("#search").attr('disabled', false)
         $("#search").val(this.loadText);
-		
-		var self = this;
+        
+        var self = this;
         setTimeout(function(){
-		    self.handleHistoryChange(self.loadHistoryData);
-            $("#search").focus();				
-		},1000);        
+            self.handleHistoryChange(self.loadHistoryData);
+            $("#search").focus();                
+        },1000);        
     },
-	
+    
     handleHistoryChange : function(data){
-		
-		if(data.search){
+        
+        if(data.search){
             $("#search").val(data.search);
             this.searchCurrent();
             if(!data.who) return;
         }
         if(!data.who){
-			this.searchCurrent();
+            this.searchCurrent();
             
             if(this.who) return;
             
             data.who = "index"
-		}
-		var who = data.who;
-		//might need to remove everyone under you from selected
-		for(var i =0; i < this.selected.length; i++){
-			if(this.selected[i].name == who){
-				this.selected.splice(i,this.selected.length - i)
-				break;
-			}
-		}
+        }
+        var who = data.who;
+        //might need to remove everyone under you from selected
+        for(var i =0; i < this.selected.length; i++){
+            if(this.selected[i].name == who){
+                this.selected.splice(i,this.selected.length - i)
+                break;
+            }
+        }
 
         $.ajax({
-			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: this.callback('show', who),
-			error: this.callback('whoNotFound', who),
-			jsonpCallback: "C",
-			dataType: "jsonp"
-		});
+            url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
+            success: this.callback('show', who),
+            error: this.callback('whoNotFound', who),
+            jsonpCallback: "C",
+            dataType: "jsonp"
+        });
     },
-	
-	"history.index subscribe" : function(called, data){
+    
+    "history.index subscribe" : function(called, data){
 
-		
-		if(!this.searchReady){ //if search is not ready .. wait until it is
+        
+        if(!this.searchReady){ //if search is not ready .. wait until it is
             this.loadHistoryData = data;
             return;
         }
         this.handleHistoryChange(data)
-	},
-	whoNotFound : function(who) {
-		var parts = who.split(".");
-		parts.pop();
-		if(parts.length) {
-			who = parts.join(".");
-	        $.ajax({
-				url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-				success: this.callback('show', who),
-				error: this.callback('whoNotFound', who),
-				jsonpCallback: "C",
-				dataType: "jsonp"
-			});			
-		}
-	} 
-	
+    },
+    whoNotFound : function(who) {
+        var parts = who.split(".");
+        parts.pop();
+        if(parts.length) {
+            who = parts.join(".");
+            $.ajax({
+                url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
+                success: this.callback('show', who),
+                error: this.callback('whoNotFound', who),
+                jsonpCallback: "C",
+                dataType: "jsonp"
+            });            
+        }
+    } 
+    
 }
 );
 var orderedParams = function(params){
-	var ordered = [];
-	for(var name in params){
-		ordered[params[name].order] = params[name]
-	}
-	return ordered;
+    var ordered = [];
+    for(var name in params){
+        ordered[params[name].order] = params[name]
+    }
+    return ordered;
 }
 
 DocumentationController.Helpers = {
-	previousIndent: 0,
-	calculateDisplay : function(previous, current){
+    previousIndent: 0,
+    calculateDisplay : function(previous, current){
 
-		var t = current.split(/\./)
+        var t = current.split(/\./)
         var p = previous.split(/\./);
         var left_res = [], right_res = []
         for(var j = 0; j < t.length; j++){
@@ -374,18 +409,18 @@ DocumentationController.Helpers = {
                 break;
             }
         }
-		if(left_res.length == 1 && (left_res[0] == "jQuery" || left_res[0] == "steal"))
-			return {
-				length : 1 , name: current
-			}
-		
-		if(this.indentAdjust === undefined) this.indentAdjust =  !!(left_res.length) ? 0 : 1;
-		var newIndent = left_res.length < 2 ? left_res.length + this.indentAdjust : left_res.length;
-		
-		return  {
-			length: newIndent, name: right_res.join(".")
-		}
-	},
+        if(left_res.length == 1 && (left_res[0] == "jQuery" || left_res[0] == "steal"))
+            return {
+                length : 1 , name: current
+            }
+        
+        if(this.indentAdjust === undefined) this.indentAdjust =  !!(left_res.length) ? 0 : 1;
+        var newIndent = left_res.length < 2 ? left_res.length + this.indentAdjust : left_res.length;
+        
+        return  {
+            length: newIndent, name: right_res.join(".")
+        }
+    },
     linkTags : function(tags){
         var res = [];
         for(var i =0; i < tags.length; i++)
@@ -438,7 +473,13 @@ DocumentationController.Helpers = {
             }
             return  match;
         })
-    }
+    },
+	
+	humanizeUrl : function(url) {
+		url = url.href ? url.href : url;
+        var parts = url.match(/(https?:\/\/|file:\/\/)[^\/]*\/(.*)/);
+		return url = parts[2] ? parts[2] : url;
+	}
 }
 
 $.fn.highlight = function(){
