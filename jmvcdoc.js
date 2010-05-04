@@ -10,7 +10,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
      .resources(//'jsonp',
 	 			'highlight','languages/javascript','languages/www')
      .models('favorites','search')
-     .controllers("documentation","iframe_scripts")
+     .controllers("documentation","iframe","demo")
      .views('//jmvcdoc/views/attribute.ejs',
 	 	    '//jmvcdoc/views/class.ejs',
 			'//jmvcdoc/views/constructor.ejs',
@@ -19,7 +19,8 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			'//jmvcdoc/views/page.ejs',
 			'//jmvcdoc/views/results.ejs',
 			'//jmvcdoc/views/top.ejs',
-			'//jmvcdoc/views/scripts_menu.ejs')
+			'//jmvcdoc/views/scripts_menu.ejs',
+			'//jmvcdoc/views/demo/init.ejs')
 	.then(function(){
 
 	})

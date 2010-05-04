@@ -54,13 +54,21 @@ jQuery.Controller.extend('DocumentationController',
              )
          }
          
+		 
+	 	 // cleanup iframe menu when navigating to another page
+	 	 if($(".iframe_menu_wrapper").length) $(".iframe_menu_wrapper").remove();
+		 
+		 // hookup iframe ui
          var $iframe = $("iframe");
          if ($iframe.length) {
-		 	this.hookupIframeUI();
-		 } else {
-		 	// cleanup iframe menu when navigating to another page
-		 	if($(".iframe_menu_wrapper").length) $(".iframe_menu_wrapper").remove();
+		 	this.hookupIframeUI($iframe);
 		 }
+		 
+		 // hookup demo ui
+		 var $demo_wrapper = $(".demo_wrapper");
+         if ($demo_wrapper.length) {
+		 	this.hookupDemoUI($demo_wrapper);
+		 }		 
      },
 
      ".iframe_menu_button click" : function(el, ev) {
@@ -81,7 +89,7 @@ jQuery.Controller.extend('DocumentationController',
                         at: 'right bottom'
                     }).trigger('move', el);
 					
-					$iframeMenuWrapper.iframe_scripts();
+					$iframeMenuWrapper.iframe();
                 } else {
                     $iframeMenuWrapper.slideToggle("slow");
                 }
@@ -93,9 +101,8 @@ jQuery.Controller.extend('DocumentationController',
         return src.replace(/[\/\.]/g,"_")
      },     
      
-     hookupIframeUI : function() {
+     hookupIframeUI : function($iframe) {
          var self = this,
-            $iframe = $("iframe"),
             scripts = [];
                      
          $iframe.bind('load', function(){ $('script', $iframe[0].contentWindow.document)
@@ -106,6 +113,10 @@ jQuery.Controller.extend('DocumentationController',
             self.iframesCache[ self.toId($iframe.attr("src")) ] = scripts;              
          });           
      },
+	 
+     hookupDemoUI : function($demo_wrapper) {
+         $demo_wrapper.demo();
+     },	 
           
      showResultsAndDoc : function(searchResultsData, docData){
          $("#left").html("//jmvcdoc/views/results.ejs",

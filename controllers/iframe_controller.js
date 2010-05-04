@@ -1,9 +1,9 @@
 /**
  * @tag home
  * 
- * Handles iframe scripts menu evets
+ * Handles iframe menu events
  */
-jQuery.Controller.extend('IframeScriptsController',
+jQuery.Controller.extend('IframeController',
 /* @Static */
 { 
 },
