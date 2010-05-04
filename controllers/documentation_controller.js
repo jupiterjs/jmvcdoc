@@ -66,9 +66,7 @@ jQuery.Controller.extend('DocumentationController',
 		 
 		 // hookup demo ui
 		 var $demo_wrapper = $(".demo_wrapper");
-         if ($demo_wrapper.length) {
-		 	this.hookupDemoUI($demo_wrapper);
-		 }		 
+         if ($demo_wrapper.length) $demo_wrapper.demo();
      },
 
      ".iframe_menu_button click" : function(el, ev) {
@@ -113,10 +111,6 @@ jQuery.Controller.extend('DocumentationController',
             self.iframesCache[ self.toId($iframe.attr("src")) ] = scripts;              
          });           
      },
-	 
-     hookupDemoUI : function($demo_wrapper) {
-         $demo_wrapper.demo();
-     },	 
           
      showResultsAndDoc : function(searchResultsData, docData){
          $("#left").html("//jmvcdoc/views/results.ejs",
