@@ -12,7 +12,12 @@
     <%} %>
     <% if(this.plugin){ %>
     <div class='plugin'>
-        Plugin: <%= this.plugin %>
+        plugin: <%= this.plugin %>
+    </div>
+    <% } %>
+	<% if(this.download){ %>
+    <div class='download'>
+        download: <a href='<%= this.download %>'><%=this.download.match(/[^\/]*$/)[0]%></a>
     </div>
     <% } %>
 </div>

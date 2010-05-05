@@ -26,7 +26,7 @@ jQuery.Controller.extend('DemoController',
 
             self.find(".demo_content").css({"padding":"5px"});
             
-            html = $body.find("#demo-html").html();
+            html = this.contentWindow.DEMO_HTML || $body.find("#demo-html").html();
             self.find(".html_content")
               .html( "<pre><code class=\"html\"></code></pre>" )
               .find("code").text( html ).highlight();
