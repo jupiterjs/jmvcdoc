@@ -269,17 +269,35 @@ iframe {
 	margin: 5px 2px 0px 2px;
 }
 
+.ui-accordion h3 a,
+.ui-accordion h3 a:link,
+.ui-accordion h3 a:visited {
+	font-family: "Trebuchet MS",Verdana,Helvetica,Arial,sans-serif;
+	font-size: 0.8em;
+    height: 15px;
+	background-color: #96A84A;
+	border-top: 1px solid #AABF54;
+	color: #ffffff;
+}
+
 .ui-accordion .ui-accordion-content {
     padding: 0;
 	margin: 0;
 }
 
 .ui-accordion .ui-accordion-content pre {
-	padding: 0;
+	padding: 5px;
 	margin: 0;
+	background-image: none;
+}
+
+.ui-accordion .ui-accordion-content pre code {
+	font-family: "Courier New";
 }
 
 .ui-accordion .ui-accordion-content iframe {
+	background-color: #ffffff;
+	border: none;
     padding: 0;
 	margin: 0;
 }

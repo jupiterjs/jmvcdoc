@@ -29,16 +29,16 @@ jQuery.Controller.extend('DemoController',
             html = this.contentWindow.DEMO_HTML || $body.find("#demo-html").html();
             self.find(".html_content")
               .html( "<pre><code class=\"html\"></code></pre>" )
-              .find("code").text( html ).highlight();
+              .find("code").text( $.trim(html) ).highlight();
               
             source = $body.find("#demo-source").html();
             self.find(".source_content")
               .html( "<pre><code class=\"javascript\"></code></pre>" )
-              .find("code").text( source ).highlight();
+              .find("code").text( $.trim(source) ).highlight();
 
             height = $body.outerHeight();
             $iframe.height( height + 50 );
-            self.find(".demo_content").height( height + 50 );
+            self.find(".demo_content").height( height + 55 );
         })
     },
         
