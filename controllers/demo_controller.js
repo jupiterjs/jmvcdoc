@@ -11,7 +11,7 @@ jQuery.Controller.extend('DemoController',
 {
     init : function() {
         var self = this;
-        var height = 320, html = "", source = "";
+        var height = 320, html = "", source = "", standbySource;
 
         hljs.start();
         
@@ -35,6 +35,21 @@ jQuery.Controller.extend('DemoController',
             self.find(".source_content")
               .html( "<pre><code class=\"javascript\"></code></pre>" )
               .find("code").text( $.trim(source) ).highlight();
+			  
+            // save second script(to show when we can't find #demo-source
+			if(!source) {
+				$('script', $iframe[0].contentWindow.document).each(function(i, script){
+                    if (!script.text.match(/steal.end()/)) {
+						standbySource = script.text;
+						// break if it's not steal.js
+						if( !script.src.match(/steal.js/) ) return false;
+					}
+                });
+				
+	            self.find(".source_content")
+	              .html( "<pre><code class=\"javascript\"></code></pre>" )
+	              .find("code").text( $.trim(standbySource) ).highlight();				 
+			}
 
             height = $body.outerHeight();
             $iframe.height( height + 50 );
