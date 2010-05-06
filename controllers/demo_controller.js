@@ -57,7 +57,7 @@ jQuery.Controller.extend('DemoController',
         })
     },
         
-    ".section click" : function(el, ev) {
+    ".header click" : function(el, ev) {
         el.next().toggle("slow")
         el.find("span").toggleClass("ui-icon-triangle-1-s").toggleClass("ui-icon-triangle-1-e");
     }});
