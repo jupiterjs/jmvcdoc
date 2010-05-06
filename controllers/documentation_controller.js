@@ -59,57 +59,12 @@ jQuery.Controller.extend('DocumentationController',
 	 	 if($(".iframe_menu_wrapper").length) $(".iframe_menu_wrapper").remove();
 		 
 		 // hookup iframe ui
-         var $iframe = $("iframe");
-         if ($iframe.length) {
-		 	this.hookupIframeUI($iframe);
-		 }
+		 var $iframe_wrapper = $(".iframe_wrapper");
+         if ($iframe_wrapper.length) $iframe_wrapper.iframe();		 
 		 
 		 // hookup demo ui
 		 var $demo_wrapper = $(".demo_wrapper");
          if ($demo_wrapper.length) $demo_wrapper.demo();
-     },
-
-     ".iframe_menu_button click" : function(el, ev) {
-            var $iframe = $("iframe");
-            var id = this.toId($iframe.attr("src"));
-            var scripts = this.iframesCache[id];
-            if (scripts && scripts.length > 0) {
-                var $iframeMenuWrapper = $( this.find(".iframe_menu_wrapper")[0] );
-                if (!$iframeMenuWrapper.length) {
-                    el.after("//jmvcdoc/views/iframe_menu.ejs", {
-                        'scripts': scripts,
-                        'iframeWindow': $iframe[0].contentWindow
-                    }, DocumentationController.Helpers);
-                    
-                    $iframeMenuWrapper = $( this.find(".iframe_menu_wrapper")[0] );                    
-                    $iframeMenuWrapper.phui_positionable({
-                        my: 'right top',
-                        at: 'right bottom'
-                    }).trigger('move', el);
-					
-					$iframeMenuWrapper.iframe();
-                } else {
-                    $iframeMenuWrapper.slideToggle("slow");
-                }
-                
-            }      
-     },
-     
-     toId : function(src){
-        return src.replace(/[\/\.]/g,"_")
-     },     
-     
-     hookupIframeUI : function($iframe) {
-         var self = this,
-            scripts = [];
-                     
-         $iframe.bind('load', function(){ $('script', $iframe[0].contentWindow.document)
-            .each(function(i, script){
-                if(!script.text.match(/steal.end()/)) scripts.push(script);
-            }); 
-            if(!self.iframesCache) self.iframesCache = {};
-            self.iframesCache[ self.toId($iframe.attr("src")) ] = scripts;              
-         });           
      },
           
      showResultsAndDoc : function(searchResultsData, docData){
