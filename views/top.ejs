@@ -20,4 +20,9 @@
         download: <a href='<%= this.download %>'><%=this.download.match(/[^\/]*$/)[0]%></a>
     </div>
     <% } %>
+	<% if(this.test){ %>
+    <div class='test'>
+        test: <a href='<%= this.test %>'><%=this.test.match(/[^\/]*$/)[0]%></a>
+    </div>
+    <% } %>
 </div>
