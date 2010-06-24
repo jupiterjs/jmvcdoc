@@ -354,7 +354,7 @@ DocumentationController.Helpers = {
         }
     },
 	normalizeName: function( name ) {
-		return name.replace(/&gt;/,"_gt_");
+		return name.replace(/&gt;/,"_gt_").replace(/\*/g,"_star_");
 	},
     linkTags : function(tags){
         var res = [];
