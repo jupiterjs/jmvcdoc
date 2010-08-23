@@ -70,7 +70,13 @@ jQuery.Controller.extend('DocumentationController',
 	 	 $("#disqus_thread").children().remove();
 		 if(docData.name != "index" && COMMENTS_LOCATION && $("#disqus_thread").length) {
 			window.disqus_title = docData.name;
-			window.disqus_url = location.href.replace(/\#/, '');
+			// can't use subdomains or hashes
+			var subdomain = location.href.match(/\/\/(.*\.)\w*\.\w*\//), 
+				disqus_url = location.href
+			if(subdomain){
+				disqus_url = location.href.replace(subdomain[1], "");
+			}
+			window.disqus_url = disqus_url.replace(/\#/, '');
 			window.disqus_identifier = window.disqus_url;
 			steal.insertHead(COMMENTS_LOCATION);
 		 }
