@@ -65,6 +65,21 @@ jQuery.Controller.extend('DocumentationController',
 		 // hookup demo ui
 		 var $demo_wrapper = $(".demo_wrapper");
          if ($demo_wrapper.length) $demo_wrapper.demo();
+		 
+		 // add disqus comments
+	 	 $("#disqus_thread").children().remove();
+		 if(docData.name != "index" && COMMENTS_LOCATION && $("#disqus_thread").length) {
+			window.disqus_title = docData.name;
+			// can't use subdomains or hashes
+			var subdomain = location.href.match(/\/\/(.*\.)\w*\.\w*\//), 
+				disqus_url = location.href
+			if(subdomain){
+				disqus_url = location.href.replace(subdomain[1], "");
+			}
+			window.disqus_url = disqus_url.replace(/\#/, '');
+			window.disqus_identifier = window.disqus_url;
+			steal.insertHead(COMMENTS_LOCATION);
+		 }
      },
           
      showResultsAndDoc : function(searchResultsData, docData){

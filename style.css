@@ -38,7 +38,7 @@ h5 {
     background-color: white;
     margin-right: 0px;
 }
-#doc {
+#doc, #disqus_thread {
     padding: 20px;
 }
 #left {

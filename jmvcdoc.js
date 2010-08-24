@@ -25,3 +25,11 @@ steal.plugins('jquery/controller','jquery/controller/history',
 	.then(function(){
 
 	})
+
+if(COMMENTS_LOCATION){
+	steal.css("http://mediacdn.disqus.com/1066/build/themes/narcissus.css?1281560657&", 
+			  "http://mediacdn.disqus.com/1066/styles/embed/thread.css?")
+ 	if (window.location.protocol == "file:" || window.location.hostname == "localhost") { // development
+		window.disqus_developer = 1
+	}
+}
