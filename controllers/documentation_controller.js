@@ -68,7 +68,7 @@ jQuery.Controller.extend('DocumentationController',
 		 
 		 // add disqus comments
 	 	 $("#disqus_thread").children().remove();
-		 if(docData.name != "index" && COMMENTS_LOCATION && $("#disqus_thread").length) {
+		 if(docData.name != "index" && typeof(COMMENTS_LOCATION) != "undefined" && $("#disqus_thread").length) {
 			window.disqus_title = docData.name;
 			// can't use subdomains or hashes
 			var subdomain = location.href.match(/\/\/(.*\.)\w*\.\w*\//), 

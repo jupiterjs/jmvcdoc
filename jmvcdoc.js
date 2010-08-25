@@ -26,7 +26,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
 
 	})
 
-if(COMMENTS_LOCATION){
+if(typeof(COMMENTS_LOCATION) != "undefined"){
 	steal.css("http://mediacdn.disqus.com/1066/build/themes/narcissus.css?1281560657&", 
 			  "http://mediacdn.disqus.com/1066/styles/embed/thread.css?")
  	if (window.location.protocol == "file:" || window.location.hostname == "localhost") { // development
