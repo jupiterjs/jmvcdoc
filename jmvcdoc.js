@@ -8,7 +8,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			  'phui/positionable',
 			  'phui/menuable')
      .resources(//'jsonp',
-	 			'highlight','languages/javascript','languages/www')
+	 			'helpers','highlight','languages/javascript','languages/www')
      .models('favorites','search')
      .controllers("documentation","iframe","demo")
      .views('//jmvcdoc/views/attribute.ejs',
