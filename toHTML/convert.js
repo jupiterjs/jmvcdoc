@@ -23,7 +23,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 			var searchDataText = readFile(path+"/searchData.json")
 			this.searchData = eval( searchDataText );
 			var dir = new java.io.File(path), 
-				children = dir.list(), i, script, child, htmlFilePath, bodyHTML, fullPageHTML;
+				children = dir.list(), i, script, child, htmlFilePath, bodyHTML, sidebarHTML, fullPageHTML;
 			for (i = 0; i < children.length; i++) {
 				child = ""+children[i];
 				if (child === "searchData.json" || (new java.io.File(path+"/"+child)).isDirectory()) {
@@ -31,8 +31,9 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				}
 				script = readFile(path+"/"+child);
 				htmlFilePath = docsLocation+"/"+child.replace(/\.json$/, ".html");
+				sidebarHTML = this.renderSidebar(script, child);
 				bodyHTML = this.renderPage(script, child);
-				fullPageHTML = this.renderLayout(bodyHTML, child);
+				fullPageHTML = this.renderLayout(bodyHTML, sidebarHTML, child);
 				this.saveHTML(fullPageHTML, htmlFilePath);
 			}
 		},
@@ -40,11 +41,11 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 		saveHTML: function(html, filePath){
 			new steal.File( filePath ).save( html );
 		},
-		// renders the full page html, inserting the body html
-		renderLayout: function(bodyHTML, fileName){
-			var template = readFile("jmvcdoc/toHTML/page.ejs")
+		renderLayout: function(bodyHTML, sidebarHTML, fileName){
+			var template = readFile( "documentjs/toHTML/page.ejs" );
 			html = new steal.EJS({ text : template }).render( {
-				body: bodyHTML
+				body: bodyHTML,
+				sidebar: sidebarHTML
 			} ); 
 			
 			return html;				
@@ -59,6 +60,26 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 			html = new steal.EJS({ text : template }).render( json, this.helpers ); 
 			return html;				
 		},
+		// creates the sidebar's html
+		renderSidebar: function(text, fileName){
+			var json = eval(text),
+				html, data, selected = [],
+				sidebar = readFile( "jmvcdoc/views/results.ejs" );
+			Search.setData( ToHTML.searchData );
+				
+			//print("TEMPLATE: " + fileName)
+        	if (json.children && json.children.length) { //we have a class or constructor
+				selected.push(json);
+				var list = jQuery.makeArray(json.children).sort(Search.sortFn);
+				data = {list: list, selected: selected, hide: true};
+			} else {
+				data = {list: Search.find(""), selected: selected, hide: false}
+			}				
+			 
+			html = new steal.EJS({ text : sidebar })
+				.render( data, this.helpers );			 
+			return html;				
+		},			
 		// creates docs/html directory
 		createDir: function(path){
 			new steal.File(docsLocation).mkdir()
@@ -104,7 +125,122 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				};
 				return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowerUpper, '$1_$2').replace(regs.dash, '_').toLowerCase()
 			}
-		}
+		},
+		isFunction: function( obj ) {
+			return toString.call(obj) === "[object Function]";
+		},		
+		merge: function( first, second ) {
+			var i = first.length, j = 0;
+	
+			if ( typeof second.length === "number" ) {
+				for ( var l = second.length; j < l; j++ ) {
+					first[ i++ ] = second[ j ];
+				}
+			
+			} else {
+				while ( second[j] !== undefined ) {
+					first[ i++ ] = second[ j++ ];
+				}
+			}
+	
+			first.length = i;
+	
+			return first;
+		},		
+		makeArray: function( array, results ) {
+			var ret = results || [];
+	
+			if ( array != null ) {
+				// The window, strings (and functions) also have 'length'
+				// The extra typeof function check is to prevent crashes
+				// in Safari 2 (See: #3039)
+				if ( array.length == null || typeof array === "string" || jQuery.isFunction(array) || (typeof array !== "function" && array.setInterval) ) {
+					push.call( ret, array );
+				} else {
+					jQuery.merge( ret, array );
+				}
+			}
+	
+			return ret;
+		}		
+		
+	}
+	
+	Search = {
+	    setData : function(data){
+			this._data = data;
+	        return arguments;
+	    },
+	    find: function(val){
+	        var valWasEmpty, level = 2;
+	        var val = val.toLowerCase();
+	        
+	        if (!val || val === "*") {
+				val = "home"; // return the core stuff
+				valWasEmpty = true;
+			}
+	        
+	        if(val == "favorites")
+				return Favorites.findAll()
+	        
+	        var current = this._data;
+	        for(var i =0; i < level; i++){
+	            if(val.length <= i || !current) break;
+	            var letter = val.substring(i, i+1);
+	            current = current[letter];
+	        }
+	        var list = [];
+	        if(current && val.length > level){
+	            //make sure everything in current is ok
+	            var lookedup = this.lookup(current.list);
+	            for(var i =0; i < lookedup.length; i++){
+	                if(this.matches(lookedup[i],val, valWasEmpty) ) 
+	                    list.push(lookedup[i])
+	            }
+	        }else if(current){
+	            list = this.lookup(current.list);
+	        }
+			return list.sort(this.sortFn);
+	    },
+	    matches : function(who, val, valWasEmpty){
+	        if(!valWasEmpty && who.name.toLowerCase().indexOf(val) > -1) return true;
+	        if(who.tags){
+	            for(var t=0; t< who.tags.length; t++){
+	                 if(who.tags[t].toLowerCase().indexOf(val) > -1) return true;
+	            }
+	        }
+	        return false;
+	    },
+	    sortFn :  function(a, b){
+			//if equal, then prototype, prototype properties go first
+	        var aname = (a.title? a.title : a.name).replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
+			var bname = (b.title? b.title : b.name).replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
+			 
+			
+			if(aname < bname) 
+				return -1
+			else aname > bname
+				return 1
+			return 0;
+		},
+	    sortJustStrings : function(aname, bname){
+	        var aname = aname.replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
+			var bname = bname.replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
+			 
+			
+			if(aname < bname) 
+				return -1
+			else aname > bname
+				return 1
+			return 0;
+	    },
+	    lookup : function(names){
+	        var res = [];
+	        for(var i =0; i < names.length; i++){
+	            res.push( this._data.list[names[i]]  )
+	        }
+	        return res;
+	    }
 	}
 	
 	ToHTML.createDir(path);
