@@ -42,7 +42,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 			new steal.File( filePath ).save( html );
 		},
 		renderLayout: function(bodyHTML, sidebarHTML, fileName){
-			var template = readFile( "documentjs/toHTML/page.ejs" );
+			var template = readFile( "jmvcdoc/toHTML/page.ejs" );
 			html = new steal.EJS({ text : template }).render( {
 				body: bodyHTML,
 				sidebar: sidebarHTML
@@ -64,14 +64,14 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 		renderSidebar: function(text, fileName){
 			var json = eval(text),
 				html, data, selected = [],
-				sidebar = readFile( "jmvcdoc/views/results.ejs" );
+				sidebar = readFile( "jmvcdoc/toHTML/results.ejs" );
 			Search.setData( ToHTML.searchData );
 				
 			//print("TEMPLATE: " + fileName)
         	if (json.children && json.children.length) { //we have a class or constructor
 				selected.push(json);
 				var list = jQuery.makeArray(json.children).sort(Search.sortFn);
-				data = {list: list, selected: selected, hide: true};
+				data = {list: list, selected: selected, hide: false};
 			} else {
 				data = {list: Search.find(""), selected: selected, hide: false}
 			}				
@@ -103,7 +103,16 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 					}
 					return  match;
 				})
-			}
+			},
+		    linkTags : function(tags){
+		        var res = [];
+		        for(var i =0; i < tags.length; i++)
+		            res.push( "<a href='"+tags[i]+"'>"+tags[i]+"</a>"   )
+		        return res.join(" ");
+		    },
+		    linkOpen : function(addr){
+		        return "<a href='"+addr+".html'>"+addr+"</a>"  
+		    }
 		})
 	}
 	
