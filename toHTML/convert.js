@@ -35,45 +35,52 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				children = dir.list(), i, script, child, htmlFilePath, bodyHTML, sidebarHTML, fullPageHTML;
 			for (i = 0; i < children.length; i++) {
 				child = ""+children[i];
-				if (child === "searchData.json" || (new java.io.File(path+"/"+child)).isDirectory()) {
+				if (child === "searchData.json" ||
+					child === "keep.me" || 
+					(new java.io.File(path+"/"+child)).isDirectory()) {
 					continue;
 				}
 				script = readFile(path+"/"+child);
+				json = eval( script );
 				htmlFilePath = docsLocation+"/"+child.replace(/\.json$/, ".html");
-				sidebarHTML = this.renderSidebar(script, child);
-				bodyHTML = this.renderPage(script, child);
-				fullPageHTML = this.renderLayout(bodyHTML, sidebarHTML, child);
-				this.saveHTML(fullPageHTML, htmlFilePath);
+				sidebarHTML = this.renderSidebar(json, child);
+				bodyHTML = this.renderPage(json, child);
+				title = json.name.replace(/\.static|\.prototype/, "").replace(/\./g," ");
+				fullPageHTML = this.renderLayout(bodyHTML, sidebarHTML, title, child);
+				this.saveHTML(fullPageHTML, htmlFilePath);				
 			}
 		},
 		// saves html to a file
 		saveHTML: function(html, filePath){
 			new steal.File( filePath ).save( html );
 		},
-		renderLayout: function(bodyHTML, sidebarHTML, fileName){
+		renderLayout: function(bodyHTML, sidebarHTML, title, fileName){
 			var template = readFile( "jmvcdoc/toHTML/page.ejs" );
 			html = new steal.EJS({ text : template }).render( {
 				body: bodyHTML,
 				sidebar: sidebarHTML,
+				title: title,
 				jmvcRoot: jmvcRoot
 			} ); 
 			
 			return html;				
-		},
+		},		
 		// creates the body's html
-		renderPage: function(text, fileName){
-			var json = eval(text),
-				name = json.shortName.toLowerCase(),
+		renderPage: function(json, fileName){
+			var name = json.shortName.toLowerCase(),
+				topTemplate = readFile( "jmvcdoc/views/top.ejs" ),
 				templateName = "jmvcdoc/views/"+json.shortName.toLowerCase()+".ejs",
 				template = readFile( templateName ), html;
 			
-			html = new steal.EJS({ text : template }).render( json, this.helpers ); 
+			print("TEMPLATE: " + fileName);
+			json.isFavorite = false;
+			html = new steal.EJS({ text : topTemplate }).render( json, this.helpers );
+			html += new steal.EJS({ text : template }).render( json, this.helpers ); 
 			return html;				
 		},
 		// creates the sidebar's html
-		renderSidebar: function(text, fileName){
-			var json = eval(text),
-				html, data, selected = [],
+		renderSidebar: function(json, fileName){
+			var html, data, selected = [],
 				sidebar = readFile( "jmvcdoc/toHTML/results.ejs" );
 			Search.setData( ToHTML.searchData );
 				
