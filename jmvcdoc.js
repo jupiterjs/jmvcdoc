@@ -23,7 +23,11 @@ steal.plugins('jquery/controller','jquery/controller/history',
 			'//jmvcdoc/views/iframe/menu.ejs',
 			'//jmvcdoc/views/demo/init.ejs')
 	.then(function(){
-
+		var pageNameArr = window.location.href.match(/docs\/(.*)\.html/),
+			pageName = pageNameArr && pageNameArr[1]
+		if (pageName) {
+			window.location.hash = "&who=" + pageName
+		}
 	})
 
 if(typeof(COMMENTS_LOCATION) != "undefined"){

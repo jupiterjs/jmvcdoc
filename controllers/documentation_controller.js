@@ -185,8 +185,6 @@ jQuery.Controller.extend('DocumentationController',
             $("#results").slideUp("fast", function(){
                 window.location.hash = "#&who="+who;
             })
-            
-            ///$.get("docs/classes/"+who+".json", {},this.callback('show', who),'json');
         }else{
             var self = this;
             $("#results").slideUp("fast", function(){
@@ -216,29 +214,6 @@ jQuery.Controller.extend('DocumentationController',
     },
 
     ready : function(){
-        /*$("#menu").phui_menuable().find("ul").phui_menuable().hide()
-            .bind("show", function(){
-                $(this).show(function(){
-                    $(this).trigger("show:after")
-                });
-            })
-            .bind("hide", function(){
-                $(this).hide(function(){
-                    $(this).trigger("hide:after")
-                });
-            });
-        $("#menu").find("a").click(function(){
-            $(this).closest("li").trigger("activate")
-        });
-        
-        $("#menu").find("a").focus(function(){
-            $(this).closest("li").trigger("select")
-        });
-        $("#menu").find("a").keypress(function(ev){
-            if(ev.keyCode == 13 || ev.keyCode == 10)
-                $(this).closest("li").trigger("activate")
-        });*/        
-
         var self = this;
         this.find("#documentation").phui_filler({parent: $(window)});
         this.find("#bottom").phui_filler();
@@ -328,7 +303,7 @@ jQuery.Controller.extend('DocumentationController',
                 dataType: "jsonp"
             });            
         }
-    } 
+    }
     
 }
 );
