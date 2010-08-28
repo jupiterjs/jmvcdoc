@@ -1,7 +1,8 @@
-// js documentjs/toHTML/convert.js jmvc\docs docs
+// js jmvcdoc/toHTML/convert.js jmvc\docs docs
 
 var path = _args[0], 
-	docsLocation = _args[1];
+	docsLocation = _args[1],
+	jmvcRoot;
 
 if (!path) {
 	print("Please pass the docs directory into the script");
@@ -9,8 +10,16 @@ if (!path) {
 }
 
 if(!docsLocation){
-	docsLocation = path+"/docs"
+	docsLocation = path+"/docs";
+	docsLocation = docsLocation.replace("\\", "/");
 }
+
+// cookbook/test/docs --> ../../..
+var nbrDirs = docsLocation.split("/").length, jmvcRootArr = [];
+for (var i = 0; i < nbrDirs; i++) {
+	jmvcRootArr.push('..')
+}
+jmvcRoot = jmvcRootArr.join("/")+"/"
 
 load('steal/rhino/steal.js')
 
@@ -45,7 +54,8 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 			var template = readFile( "jmvcdoc/toHTML/page.ejs" );
 			html = new steal.EJS({ text : template }).render( {
 				body: bodyHTML,
-				sidebar: sidebarHTML
+				sidebar: sidebarHTML,
+				jmvcRoot: jmvcRoot
 			} ); 
 			
 			return html;				

@@ -111,7 +111,7 @@
                 
             
                 <div id='left'>
-                    <a><%= sidebar %></a>
+                    <%= sidebar %>
                 </div>
                 <div id='doc_container'>
                     <div id='doc'>
@@ -123,5 +123,11 @@
         <div id='low'>
             <a href="http://jupiterit.com">&copy; Jupiter IT - JavaScriptMVC Training and Support</a>
         </div>
+		<script type='text/javascript'>
+            DOCS_LOCATION = "<%= jmvcRoot %>/<%= docsLocation %>/"
+        </script>
+        <script type='text/javascript' 
+                src='<%= jmvcRoot %>steal/steal.production.js?documentjs/jmvcdoc'>   
+        </script>
 	</body>
 </html>
