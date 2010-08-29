@@ -214,14 +214,14 @@ jQuery.Controller.extend('DocumentationController',
     },
 
     ready : function(){
-        var self = this;
+        /*var self = this;
         this.find("#documentation").phui_filler({parent: $(window)});
         this.find("#bottom").phui_filler();
         this.find("#bottom").bind("resize", function(){
             var h = $(this).height();
             self.find("#left").height(h);
             self.find("#doc_container").height(h);    
-        });    
+        });*/    
         
         this.loaded = true;
         hljs.start();
