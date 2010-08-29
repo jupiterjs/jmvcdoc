@@ -25,7 +25,7 @@ steal.plugins('jquery/controller','jquery/controller/history',
 	.then(function(){
 		var pageNameArr = window.location.href.match(/docs\/(.*)\.html/),
 			pageName = pageNameArr && pageNameArr[1]
-		if (pageName) {
+		if (pageName && location.hash == "") {
 			window.location.hash = "&who=" + pageName
 		}
 	})
