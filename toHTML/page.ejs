@@ -6,16 +6,12 @@
         <link rel="stylesheet" type='text/css' href='<%= jmvcRoot %>documentjs/jmvcdoc/style.css' />
         <link rel="shortcut icon" href="<%= jmvcRoot %>documentjs/jmvcdoc/images/favicon.ico" />
 	</head>
-	<body scroll="no">
+	<body>
 	    
         <div id='documentation'>
 	        <div id='top'>
                 <div id='defaults'>
-                	<input id='search' type='input' disabled='true'/>
-                    <div style='color:white;float:left;margin-left:30px; position: relative; top: -2px'>
-                    	JavaScript
-                    	<img src='<%= jmvcRoot %>documentjs/jmvcdoc/images/logo.png' style="position: relative; top: 5px;left: 2px"/>
-                    </div>					
+                	<input id='search' type='input' class='notFocused' /> 
 					<ul id="menu" class="ui-menu">
 						<li class="ui-menu-item">
                     		<a href="#&amp;search=&#42;&amp;who=index">Home</a>
@@ -32,37 +28,11 @@
 						<li class="ui-menu-item">						
 							<a href="http://github.com/jupiterjs/framework" class="red" title="Code Repositories">Code Repositories</a>
 						</li>
-						<!--li class="ui-menu-item">						
-							<a href="javascript://" class="red" title="Follow">Follow&nbsp;&nbsp;&nbsp;</a>
-							<ul class="ui-menu ui-sub-menu">
-								<li><a href="http://twitter.com/javascriptmvc">Twitter</a></li>
-								<li><a href="http://blog.javascriptmvc.com/">Blog</a></li>
-								<li><a href="http://groups.google.com/group/javascriptmvc">Google Group</a></li>
-							</ul>							
-						</li>
-						<li class="ui-menu-item" class="red">						
-	                    	<a href="http://www.javascriptmvc.com/#&who=contribute" class="red" title="Contribute">Contribute</a>
-						</li>	
-						<li class="ui-menu-item">						
-	                    	<a href="http://www.javascriptmvc.com/#&who=help" class="red" title="Get Help">Get Help</a>
-						</li>	
-						<li class="ui-menu-item">						
-	                    	<a href="http://1-5.javascriptmvc.com/index.html" class="red" title="Old Site">1.5</a>
-						</li>																			
-						<li class="ui-menu-item">						
-                    		<a href="javascript://" class="red" title="Code Repositories">Code Repositories&nbsp;&nbsp;&nbsp;</a>
-							<ul class="ui-menu ui-sub-menu">
-								<li><a href="http://github.com/jupiterjs/framework">Framework 3.0</a></li>
-								<li><a href="http://github.com/jupiterjs/javascriptmvc/">Javascriptmvc 3.0</a></li>
-								<li><a href="http://github.com/jupiterjs/steal">Steal 3.0</a></li>
-								<li><a href="http://github.com/jupiterjs/funcunit">Funcunit 3.0</a></li>
-								<li><a href="http://github.com/jupiterjs/phui">Phui 3.0</a></li>								
-								<li><a href="http://github.com/jupiterjs/documentjs">Documentjs 3.0</a></li>																
-								<li><a href="http://github.com/jupiterjs/jmvcdoc">Jmvcdoc 3.0</a></li>								
-								<li><a href="http://javascriptmvc.googlecode.com/">Javascriptmvc 2.x</a></li>								
-							</ul>								
-						</li-->
 					</ul>
+                    <div id='logo'>
+                    	JavaScript
+                    	<img src='<%= jmvcRoot %>documentjs/jmvcdoc/images/logo.png' style="position: relative; top: 5px;left: 2px"/>
+                    </div>
                     
                 </div>
 	        </div>
@@ -84,10 +54,31 @@
             <a href="http://jupiterit.com">&copy; Jupiter IT - JavaScriptMVC Training and Support</a>
         </div>
 		<script type='text/javascript'>
-            DOCS_LOCATION = "<%= jmvcRoot %><%= path %>/"
+            DOCS_LOCATION = "<%= jmvcRoot %><%= args.path %>/"
+            <% if(args.commentsLoc){ %>
+            COMMENTS_LOCATION = "<%= args.commentsLoc %>";
+            <% } %>
         </script>
         <script type='text/javascript' 
                 src='<%= jmvcRoot %>steal/steal.production.js?documentjs/jmvcdoc'>   
         </script>
+        <% if(args.analyticsAct){ %>
+        	
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', "<%= args.analyticsAct %>"]);
+			_gaq.push(['_trackPageview']);
+			_gaq.push(['_setDomainName', '.<%= args.analyticsDomain %>']);
+			_gaq.push(['_setAllowLinker', true]);
+			_gaq.push(['_setAllowHash', false]);
+			
+			(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script> 
+		
+        <% } %>
 	</body>
 </html>

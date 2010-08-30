@@ -1,27 +1,33 @@
-// js jmvcdoc/toHTML/convert.js jmvc\docs docs
+// js jmvcdoc/toHTML/convert.js path=jmvc\docs docsLoc=docs commentsLoc=http://jmvc.disqus.com/embed.js analyticsAct=UA-2302003-4 analyticsDomain=javascriptmvc.com
 
-var path = _args[0], 
-	docsLocation = _args[1],
-	jmvcRoot;
+load('steal/rhino/steal.js')
+load('steal/rhino/prompt.js')
 
-if (!path) {
+var args = steal.handleArgs(_args, ["path", "docsLoc", "commentsLoc", "analyticsAct", "analyticsDomain", "jmvcRoot"])
+
+var jmvcRoot;
+
+if (!args.path) {
 	print("Please pass the docs directory into the script");
 	quit();
 }
 
-if(!docsLocation){
-	docsLocation = path+"/docs";
-	docsLocation = docsLocation.replace("\\", "/");
+if(!args.docsLoc){
+	args.docsLoc = args.path+"/docs";
+	args.docsLoc = args.docsLoc.replace("\\", "/");
 }
 
 // cookbook/test/docs --> ../../..
-var nbrDirs = docsLocation.split("/").length, jmvcRootArr = [];
-for (var i = 0; i < nbrDirs; i++) {
-	jmvcRootArr.push('..')
+if(!args.jmvcRoot){
+	var nbrDirs = args.docsLoc.split("/").length, jmvcRootArr = [];
+	for (var i = 0; i < nbrDirs; i++) {
+		jmvcRootArr.push('..')
+	}
+	jmvcRoot = jmvcRootArr.join("/")+"/"
+} else {
+	jmvcRoot = args.jmvcRoot;
 }
-jmvcRoot = jmvcRootArr.join("/")+"/"
 
-load('steal/rhino/steal.js')
 
 steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(steal){
 		
@@ -42,7 +48,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				}
 				script = readFile(path+"/"+child);
 				json = eval( script );
-				htmlFilePath = docsLocation+"/"+child.replace(/\.json$/, ".html");
+				htmlFilePath = args.docsLoc+"/"+child.replace(/\.json$/, ".html");
 				sidebarHTML = this.renderSidebar(json, child);
 				bodyHTML = this.renderPage(json, child);
 				title = json.name.replace(/\.static|\.prototype/, "").replace(/\./g," ");
@@ -60,7 +66,8 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				body: bodyHTML,
 				sidebar: sidebarHTML,
 				title: title,
-				jmvcRoot: jmvcRoot
+				jmvcRoot: jmvcRoot, 
+				args: args
 			} ); 
 			
 			return html;				
@@ -99,7 +106,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 		},			
 		// creates docs/html directory
 		createDir: function(path){
-			new steal.File(docsLocation).mkdir()
+			new steal.File(args.docsLoc).mkdir()
 		},
 		helpers:  steal.extend(DocumentationHelpers, {
 			link : function(content, dontReplace){
@@ -269,7 +276,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 	    }
 	}
 	
-	ToHTML.createDir(path);
-	ToHTML.getFiles(path);
+	ToHTML.createDir(args.path);
+	ToHTML.getFiles(args.path);
 	
 });
