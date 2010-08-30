@@ -122,10 +122,16 @@ jQuery.Controller.extend('DocumentationController',
     },
     //event handlers
     "#search focus" : function(el, ev){
+		if (el.val() == "Search API") {
+			el.val("").removeClass('notFocused')
+		}
         $('#results a:first').addClass("highlight");
     },
     "#search blur" : function(el, ev){
-        $('#results a:first').removeClass("highlight");
+        $('#results a:first').addClass("highlight");
+		if(!el.val()){
+			el.val("Search API").addClass('notFocused');
+		}
     },
     "#search keyup" : function(el, ev){
         if(ev.keyCode == 40){ //down
