@@ -13,7 +13,7 @@ jQuery.Controller.extend('DocumentationController',
      /**
       * Keeps track of who is selected
       */
-     init : function(){
+     init: function(){
         this.selected = [];
      },
      /**
@@ -89,7 +89,7 @@ jQuery.Controller.extend('DocumentationController',
          $("#results").slideDown("fast",function(){$('#results a:first')[0].focus()});
          this.showDoc(docData)
      },
-     show : function(who, data){
+     show: function(who, data){
         this.who = {name: data.name, shortName: data.shortName, tag: data.name};
         data.isFavorite = Favorites.isFavorite(data);
         if(data.children && data.children.length){ //we have a class or constructor
@@ -220,14 +220,14 @@ jQuery.Controller.extend('DocumentationController',
     },
 
     ready : function(){
-        var self = this;
+        /*var self = this;
         this.find("#documentation").phui_filler({parent: $(window)});
         this.find("#bottom").phui_filler();
         this.find("#bottom").bind("resize", function(){
             var h = $(this).height();
             self.find("#left").height(h);
             self.find("#doc_container").height(h);    
-        });    
+        });*/    
         
         this.loaded = true;
         hljs.start();

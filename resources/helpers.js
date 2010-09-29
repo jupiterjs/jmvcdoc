@@ -37,16 +37,16 @@ DocumentationHelpers = {
 	normalizeName: function( name ) {
 		return name.replace(/&gt;/,"_gt_").replace(/\*/g,"_star_");
 	},
-    linkTags : function(tags){
+    linkTags: function(tags){
         var res = [];
         for(var i =0; i < tags.length; i++)
             res.push( "<a href='#&search="+tags[i]+"'>"+tags[i]+"</a>"   )
         return res.join(" ");
     },
-    linkOpen : function(addr){
+    linkOpen: function(addr){
         return "<a href='#&who="+addr+"'>"+addr+"</a>"  
     },
-    signiture : function(){
+    signiture: function(){
         var res = [], name = this._data.name;
         //we should check if prototype or static is available
         
