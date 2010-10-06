@@ -34,7 +34,7 @@ jQuery.Controller.extend('DocumentationController',
                          DocumentationHelpers)
      },
      showDoc : function(docData){
-         $("#doc").html("//jmvcdoc/views/"+docData.shortName.toLowerCase()+".ejs",
+         $("#doc").html("//jmvcdoc/views/"+docData.type.toLowerCase()+".ejs",
                              docData,
                            DocumentationHelpers
                         ).find("h1.addFavorite").
@@ -94,7 +94,8 @@ jQuery.Controller.extend('DocumentationController',
         data.isFavorite = Favorites.isFavorite(data);
         if(data.children && data.children.length){ //we have a class or constructor
             this.selected.push(data);
-            var list = $.makeArray(data.children).sort(Search.sortFn)
+			
+            var list = $.makeArray(Search.lookup(data.children)).sort(Search.sortFn)
             var self = this;
             var results = $("#results");
             if(results.length){
