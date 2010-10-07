@@ -21,12 +21,12 @@
 	    <% } %>
 		<% if(this.download){ %>
 	    <div class='download'>
-	        download: <a href='<%= this.download %>'><%=this.download.match(/[^\/]*$/)[0]%></a>
+	        download: <a href='<%= steal.root.join(this.download) %>'><%=this.download.match(/[^\/]*$/)[0]%></a>
 	    </div>
 	    <% } %>
 		<% if(this.test){ %>
 	    <div class='test'>
-	        test: <a href='<%= this.test %>'><%=this.test.match(/[^\/]*$/)[0]%></a>
+	        test: <a href='<%= steal.root.join(this.test) %>'><%=this.test.match(/[^\/]*$/)[0]%></a>
 	    </div>
 	    <% } %>
 	</div>

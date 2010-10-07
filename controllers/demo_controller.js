@@ -17,7 +17,7 @@ jQuery.Controller.extend('DemoController',
         
         this.element.html( this.view("//jmvcdoc/views/demo/init.ejs"));
 
-        var demoSrc = this.element.attr("data-demo-src");
+        var demoSrc = steal.root.join(this.element.attr("data-demo-src"));
         var $iframe = this.find("iframe");
 		
 		
