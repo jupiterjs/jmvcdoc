@@ -95,7 +95,9 @@ jQuery.Controller.extend('DocumentationController',
         if(data.children && data.children.length){ //we have a class or constructor
             this.selected.push(data);
 			
-            var list = $.makeArray(Search.lookup(data.children)).sort(Search.sortFn)
+            var list = $.grep(Search.lookup(data.children), function(item){
+				return item.hide !== true;
+			}).sort(Search.sortFn)
             var self = this;
             var results = $("#results");
             if(results.length){

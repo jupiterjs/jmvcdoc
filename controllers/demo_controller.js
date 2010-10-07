@@ -19,20 +19,22 @@ jQuery.Controller.extend('DemoController',
 
         var demoSrc = this.element.attr("data-demo-src");
         var $iframe = this.find("iframe");
-		$iframe.attr("src", demoSrc);
+		
 		
         $iframe.bind("load", function(){
             var $body = $( this.contentWindow.document.body );
-
+			
             self.find(".demo_content").css({"padding":"5px"});
             
             html = this.contentWindow.DEMO_HTML || $body.find("#demo-html").html();
             self.find(".html_content")
               .html( "<pre><code class=\"html\"></code></pre>" )
               .find("code").text( $.trim(html) ).highlight();
-              
+            $body.find("#demo-instructions").hide();
             source = $body.find("#demo-source").html();
-            self.find(".source_content")
+            
+			
+			self.find(".source_content")
               .html( "<pre><code class=\"javascript\"></code></pre>" )
               .find("code").text( $.trim(source) ).highlight();
 			  
@@ -51,10 +53,15 @@ jQuery.Controller.extend('DemoController',
 	              .find("code").text( $.trim(standbySource) ).highlight();				 
 			}
 
-            height = $body.outerHeight();
-            $iframe.height( height + 50 );
-            self.find(".demo_content").height( height + 55 );
+            
+			setTimeout(function(){
+				height = $body.outerHeight();
+				$iframe.height( height + 50 );
+            	self.find(".demo_content").height( height + 55 );
+			},200)
+            
         })
+		$iframe.attr("src", demoSrc);
     },
         
     ".header click" : function(el, ev) {
