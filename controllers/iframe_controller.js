@@ -18,7 +18,7 @@ jQuery.Controller.extend('IframeController',
         
          this.element.html( this.view("//jmvcdoc/views/iframe/init.ejs"));
 
-         var src = this.element.attr("data-iframe-src");
+         var src = steal.root.join(this.element.attr("data-iframe-src"));
          height = !this.element.attr("data-iframe-height") ? height : this.element.attr("data-iframe-height");
          var $iframe = this.find("iframe");
 		 $iframe.attr("src", src);
@@ -57,7 +57,7 @@ jQuery.Controller.extend('IframeController',
 					
 					$iframeMenuItem = $(".iframe_menu_item a");
 					$iframeMenuItem.bind("click", function(ev){
-				        var src = $(this).attr("data-src")
+				        var src = steal.root.join($(this).attr("data-src"));
          				window.open(src, src);
 					})
 					

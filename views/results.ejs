@@ -11,7 +11,7 @@
 		 			title = (current.title ? current.title: current.name);
 					res = calculateDisplay(previous, title);
 					name = normalizeName(current.name) %>
-			    <a href="#&who=<%=name%>" class='selected choice <%=current.shortName%>' style="padding-left: <%= res.length * 20%>px">
+			    <a href="#&who=<%=name%>" class='selected choice <%=current.type%>' style="padding-left: <%= res.length * 20%>px">
 			    	<span class='remove' title="close"></span>
 					<%=res.name.replace("jQuery","$")%>
 					
