@@ -27,6 +27,9 @@ jQuery.Controller.extend('DocumentationController',
       * @param {Object} val
       */
      search : function(val){
+	 	if(val == "Search API") {
+			val = "";
+		}
         var list = Search.find(val);
         this.selected = [];
         $("#left").html("//jmvcdoc/views/results.ejs", 
