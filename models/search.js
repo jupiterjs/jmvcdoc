@@ -60,8 +60,12 @@ $.Class.extend('Search',
     },
     sortFn :  function(a, b){
 		//if equal, then prototype, prototype properties go first
-        var aname = (a.title? a.title : a.name).replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
-		var bname = (b.title? b.title : b.name).replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
+        var aname = (a.title && a.name.indexOf(".") == -1 ? a.title : a.name)
+					.replace(".prototype",".zzzaprototype")
+					.replace(".static",".zzzbstatic").toLowerCase();
+		var bname = (b.title && b.name.indexOf(".") == -1? b.title : b.name)
+					.replace(".prototype",".zzzaprototype")
+					.replace(".static",".zzzbstatic").toLowerCase();
 		 
 		
 		if(aname < bname) 
