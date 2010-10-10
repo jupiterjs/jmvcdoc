@@ -89,7 +89,7 @@ jQuery.Controller.extend('DocumentationController',
          $("#left").html("//jmvcdoc/views/results.ejs",
                                      searchResultsData,
                                       DocumentationHelpers)
-         $("#results").slideDown("fast",function(){$('#results a:first')[0].focus()});
+         $("#results").slideDown("fast");
          this.showDoc(docData)
      },
      show: function(who, data){
@@ -131,18 +131,16 @@ jQuery.Controller.extend('DocumentationController',
 		if (el.val() == "Search API") {
 			el.val("").removeClass('notFocused')
 		}
-        $('#results a:first').addClass("highlight");
     },
     "#search blur" : function(el, ev){
-        $('#results a:first').addClass("highlight");
 		if(!el.val()){
 			el.val("Search API").addClass('notFocused');
 		}
     },
     "#search keyup" : function(el, ev){
         if(ev.keyCode == 40){ //down
-            $('#results a:first').removeClass("highlight")
-            $('#results a:nth-child(2)')[0].focus();
+            //$('#results a:first').removeClass("highlight")
+            $('#results a:first')[0].focus();
         }
         else if(ev.keyCode == 13){
             window.location.hash = $('#results a:first').attr("href")
@@ -159,16 +157,16 @@ jQuery.Controller.extend('DocumentationController',
             
     },
     "#results a focus" : function(el){ 
-        el.addClass("highlight")//css("backgroundColor","#4B4C3F")
+        el.addClass("highlight")
     },
     "#results a blur" : function(el){ 
-        el.removeClass("highlight")//el.css("backgroundColor","")
+        el.removeClass("highlight")
     },
     "#results a mouseover" : function(el){ 
-        el.addClass("highlight")//css("backgroundColor","#4B4C3F")
+        el.addClass("highlight")
     },
     "#results a mouseout" : function(el){ 
-        el.removeClass("highlight")//el.css("backgroundColor","")
+        el.removeClass("highlight")
     },
     "#results a keyup" : function(el,ev){ 
         if(ev.keyCode == 40){ //down
@@ -183,11 +181,16 @@ jQuery.Controller.extend('DocumentationController',
             else{
                 this.skipSet = true;
                 $("#search")[0].focus();
-                //this.highlightFirst();
             }  
             ev.preventDefault();
         }
+        else if(ev.keyCode == 13){ // enter
+            window.location.hash = el.attr("href")
+        }
     },
+    "#results a keydown" : function(el,ev){
+		ev.preventDefault();
+	}, 
     ".remove click" : function(el, ev){
         ev.stopImmediatePropagation();
         this.selected.pop();
