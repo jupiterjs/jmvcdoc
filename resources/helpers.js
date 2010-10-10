@@ -69,7 +69,8 @@ DocumentationHelpers = {
         }
         
         
-        return name+"("+res.join(", ")+") -> "+this._data.ret.type;
+        return name+"("+res.join(", ")+")"+(this._data.ret? 
+			" -> "+this._data.ret.type: "");
     },
     link : function(content, dontReplace){
         return content.replace(/\[\s*((?:['"][^"']*["'])|[^\|\]\s]*)\s*\|?\s*([^\]]*)\s*\]/g, function(match, first, n){

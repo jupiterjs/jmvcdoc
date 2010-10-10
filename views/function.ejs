@@ -12,7 +12,7 @@
       </div>
  <% } %>
 
- <% if(this.ret.type != "undefined") {%>
+ <% if(this.ret && this.ret.type) {%>
      <div class='return'>
          <label>returns</label> 
          <code>{<%=(this.ret.type)%>}</code> - <%= (this.ret.description)%>
