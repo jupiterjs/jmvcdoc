@@ -139,8 +139,11 @@ jQuery.Controller.extend('DocumentationController',
     },
     "#search keyup" : function(el, ev){
         if(ev.keyCode == 40){ //down
-            //$('#results a:first').removeClass("highlight")
-            $('#results a:first')[0].focus();
+            var n = $('#results a:first');
+			while(n && this._isInvalidMenuItem(n)){
+				n = n.next("a");
+			}
+            n[0].focus();
         }
         else if(ev.keyCode == 13){
             window.location.hash = $('#results a:first').attr("href")
@@ -156,14 +159,22 @@ jQuery.Controller.extend('DocumentationController',
         }
             
     },
+	_isInvalidMenuItem: function(el){
+		return (el.hasClass("prototype") || el.hasClass("static"))
+	},
+	_highlight: function(el){
+		if (!this._isInvalidMenuItem(el)) {
+			el.addClass("highlight")
+		}
+	},
     "#results a focus" : function(el){ 
-        el.addClass("highlight")
+		this._highlight(el)
     },
     "#results a blur" : function(el){ 
         el.removeClass("highlight")
     },
     "#results a mouseover" : function(el){ 
-        el.addClass("highlight")
+		this._highlight(el)
     },
     "#results a mouseout" : function(el){ 
         el.removeClass("highlight")
@@ -171,12 +182,18 @@ jQuery.Controller.extend('DocumentationController',
     "#results a keyup" : function(el,ev){ 
         if(ev.keyCode == 40){ //down
             var n = el.next();
+			while(n && this._isInvalidMenuItem(n)){
+				n = n.next("a");
+			}
             if(n.length) n[0].focus();
             ev.preventDefault();
         }  
         else if(ev.keyCode == 38){ //up
-            var p = el.prev(), p2 = p.prev()
-            if(p2.length)
+            var p = el.prev("a");
+			while(p && this._isInvalidMenuItem(p)){
+				p = p.prev("a");
+			}
+            if(p.length)
                 p[0].focus()
             else{
                 this.skipSet = true;
