@@ -69,6 +69,10 @@ jQuery.Controller.extend('DocumentationController',
 		 var $demo_wrapper = $(".demo_wrapper");
          if ($demo_wrapper.length) $demo_wrapper.demo();
 		 
+		 // add image
+		 var $image_wrapper = $(".image_wrapper");
+         if ($image_wrapper.length) $image_wrapper.image();
+		 
 		 // add disqus comments
 	 	 $("#disqus_thread").children().remove();
 		 if(docData.name != "index" && typeof(COMMENTS_LOCATION) != "undefined" && $("#disqus_thread").length) {
