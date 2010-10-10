@@ -10,31 +10,33 @@
 	    
         <div id='documentation'>
 	        <div id='top'>
-                <div id='defaults'>
-                	<input id='search' type='input' class='notFocused' /> 
-					<ul id="menu" class="ui-menu">
-						<li class="ui-menu-item">
-                    		<a href="#&amp;search=&#42;&amp;who=index">Home</a>
-						</li>
-						<li class="ui-menu-item">						
-	                    	<a href="#&amp;search=core">Core</a>
-						</li>
-						<li class="ui-menu-item">						
-	                    	<a href="#favorites">Favorites</a>
-						</li>
-						<li class="ui-menu-item">						
-							<a href="http://javascriptmvc.com/#&who=follow" class="red" title="Follow">Follow</a>
-						</li>
-						<li class="ui-menu-item">						
-							<a href="http://github.com/jupiterjs/framework" class="red" title="Code Repositories">Code Repositories</a>
-						</li>
-					</ul>
-                    <div id='logo'>
-                    	JavaScript
-                    	<img src='<%= jmvcRoot %>documentjs/jmvcdoc/images/logo.png' style="position: relative; top: 5px;left: 2px"/>
-                    </div>
-                    
+	        	<div class="topCorner"><div>&nbsp;</div></div>
+				<div class="content">
+		            <div id="searchRoundCorners">
+		            	<input id='search' type='input' disabled='true'/>
+					</div>
+	                <div id='defaults'>
+						<ul id="menu" class="ui-menu">
+							<li class="ui-menu-item">
+	                    		<a class="menuLink" href="#&amp;search=&#42;&amp;who=index"><span class="menuSpan">Home</span></a>
+							</li>
+							<li class="ui-menu-item">						
+		                    	<a class="menuLink" href="#&amp;search=core"><span class="menuSpan">Core</span></a>
+							</li>
+							<li class="ui-menu-item">						
+		                    	<a class="menuLink" href="#favorites"><span class="menuSpan">Favorites</span></a>
+							</li>
+							<li class="ui-menu-item">						
+								<a class="menuLink" href="#&who=follow" title="Follow"><span class="menuSpan red">Follow</span></a>
+							</li>
+							<li class="ui-menu-item">						
+								<a class="menuLink" href="http://github.com/jupiterjs/framework" title="Code Repositories"><span class="menuSpan red">Code Repositories</span></a>
+							</li>
+						</ul>
+	            	</div>
+	                <div class="logo-text">JavaScript<img src='documentjs/jmvcdoc/images/logo80x30.png' class="logo-image"/></div>
                 </div>
+				<div class="bottomCorner"><div>&nbsp;</div></div>	                
 	        </div>
             
             <div id='bottom'>
@@ -47,6 +49,7 @@
                     <div id='doc'>
                         <%= body %>
                     </div>
+					<div id="disqus_thread"></div>
                 </div>
             </div>
         </div>

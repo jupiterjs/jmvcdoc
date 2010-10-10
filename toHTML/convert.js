@@ -48,6 +48,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				}
 				script = readFile(path+"/"+child);
 				json = eval( script );
+				if(!json.name) continue;
 				htmlFilePath = args.docsLoc+"/"+child.replace(/\.json$/, ".html");
 				sidebarHTML = this.renderSidebar(json, child);
 				bodyHTML = this.renderPage(json, child);
@@ -74,16 +75,17 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 		},		
 		// creates the body's html
 		renderPage: function(json, fileName){
-			var name = json.shortName.toLowerCase(),
+			var name = (json.type? json.type: json.name).toLowerCase(),
 				topTemplate = readFile( "jmvcdoc/views/top.ejs" ),
-				templateName = "jmvcdoc/views/"+json.shortName.toLowerCase()+".ejs",
+				templateName = "jmvcdoc/views/"+name+".ejs",
 				template = readFile( templateName ), html;
 			
-			print("TEMPLATE: " + fileName);
+			//print("TEMPLATE: " + fileName);
 			json.isFavorite = false;
+			if(!json.type) json.type = "class";
 			html = new steal.EJS({ text : topTemplate }).render( json, this.helpers );
 			html += new steal.EJS({ text : template }).render( json, this.helpers ); 
-			return html;				
+			return html;
 		},
 		// creates the sidebar's html
 		renderSidebar: function(json, fileName){
@@ -91,11 +93,18 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				sidebar = readFile( "jmvcdoc/toHTML/results.ejs" );
 			Search.setData( ToHTML.searchData );
 				
-			//print("TEMPLATE: " + fileName)
+			print("TEMPLATE: " + fileName)
         	if (json.children && json.children.length) { //we have a class or constructor
 				selected.push(json);
-				var list = jQuery.makeArray(json.children).sort(Search.sortFn);
-				data = {list: list, selected: selected, hide: false};
+				var list = jQuery.makeArray(json.children).sort(Search.sortJustStrings), 
+					converted = [], item;
+				for(var j = 0; j<list.length; j++){
+					item = ToHTML.searchData.list[list[j]];
+					if (item) {
+						converted.push(item);
+					}
+				}
+				data = {list: converted, selected: selected, hide: false};
 			} else {
 				data = {list: Search.find(""), selected: selected, hide: false}
 			}				
@@ -217,11 +226,6 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 				return Favorites.findAll()
 	        
 	        var current = this._data;
-	        for(var i =0; i < level; i++){
-	            if(val.length <= i || !current) break;
-	            var letter = val.substring(i, i+1);
-	            current = current[letter];
-	        }
 	        var list = [];
 	        if(current && val.length > level){
 	            //make sure everything in current is ok
@@ -245,6 +249,7 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function(ste
 	        return false;
 	    },
 	    sortFn :  function(a, b){
+			//print("a: "+a+", b: "+b);
 			//if equal, then prototype, prototype properties go first
 	        var aname = (a.title? a.title : a.name).replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
 			var bname = (b.title? b.title : b.name).replace(".prototype",".000AAAprototype").replace(".static",".111BBBstatic");
