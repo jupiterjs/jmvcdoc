@@ -69,9 +69,14 @@ jQuery.Controller.extend('DocumentationController',
 		 var $demo_wrapper = $(".demo_wrapper");
          if ($demo_wrapper.length) $demo_wrapper.demo();
 		 
-		 // add image
-		 var $image_wrapper = $(".image_wrapper");
-         if ($image_wrapper.length) $image_wrapper.image();
+		 // add absolute paths to image tags
+		 $(".image_tag").each(function(){
+		 	var imageTagEl = $(this),
+		 		relativePath = imageTagEl.attr("src");
+				absolutePath = steal.root.join(relativePath);
+			imageTagEl.attr("src", absolutePath); 
+		 });
+		 
 		 
 		 // add disqus comments
 	 	 $("#disqus_thread").children().remove();
