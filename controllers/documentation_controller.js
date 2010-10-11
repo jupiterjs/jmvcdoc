@@ -72,7 +72,7 @@ jQuery.Controller.extend('DocumentationController',
 		 // add absolute paths to image tags
 		 $(".image_tag").each(function(){
 		 	var imageTagEl = $(this),
-		 		relativePath = imageTagEl.attr("src");
+		 		relativePath = imageTagEl.attr("src"),
 				absolutePath = steal.root.join(relativePath);
 			imageTagEl.attr("src", absolutePath); 
 		 });
