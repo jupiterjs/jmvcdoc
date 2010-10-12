@@ -79,7 +79,7 @@ $.Class.extend('Search', {
 	lookup: function( names ) {
 		var res = [];
 		for ( var i = 0; i < names.length; i++ ) {
-			res.push(this._data.list[names[i]])
+			this._data.list[names[i]] && res.push(this._data.list[names[i]])
 		}
 		return res;
 	}
