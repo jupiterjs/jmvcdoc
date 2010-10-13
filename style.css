@@ -47,7 +47,12 @@ td {padding: 3px; vertical-align: top;}
 	background:  url("images/search_round_corners.png") no-repeat;
 	background-position:0 2px;
 	padding: 7px;
+	[padding:7px;
+	padding:5px;] /* chrome hack */
 } 
+html*#searchRoundCorners { /* ie7 hack */
+	padding: 7px;
+}
 #search {
 	width: 243px;
     font-size: 14px;
