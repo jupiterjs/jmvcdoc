@@ -4,18 +4,20 @@
   
   <div class='params'>
   
-  <% for(var name in this.params){   
-       var param = this.params[name]; %>  
+  <% for(var n in this.params){   
+       var param = this.params[n]; %>  
       <div class='param <%= param.optional ? "optional" : ""%>'>
           <label><%= param.name%></label>
-          <code>{<%=(param.optional ? 'optional:' : '') +""+(param.type) %>}</code> - <%= (param.description) %>
+          <code>{<%=(param.optional ? 'optional:' : '') +""+(param.type) %>}</code> 
+		   <%= (param.description) %>
       </div>
  <% } %>
 
  <% if(this.ret && this.ret.type) {%>
      <div class='return'>
          <label>returns</label> 
-         <code>{<%=(this.ret.type)%>}</code> - <%= (this.ret.description)%>
+         <code>{<%=(this.ret.type)%>}</code> 
+		 <%= (this.ret.description)%>
      </div>
  <% } %>   
  

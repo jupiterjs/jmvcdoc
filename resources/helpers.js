@@ -61,8 +61,9 @@ DocumentationHelpers = {
 			name = jQuery.String.underscore(name.substring(0, prto).replace("$.", "")) + "." + name.substring(prto + 11);
 		}
 
-		if ( this._data.shortName == "constructor" ) name = "new " + name;
-
+		if (this._data.construct) {
+			name = "new " + name;
+		}
 		var ordered = orderedParams(this._data.params);
 		for ( var n = 0; n < ordered.length; n++ ) {
 			res.push(ordered[n].name)
