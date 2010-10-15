@@ -105,7 +105,15 @@ jQuery.Controller.extend('DocumentationController',
 		};
 		data.isFavorite = Favorites.isFavorite(data);
 		if ( data.children && data.children.length ) { //we have a class or constructor
-			this.selected.push(data);
+			var duplicate = false;
+			for(var i=0; i<this.selected.length; i++){
+				if(this.selected[i].name == data.name) {
+					duplicate = true;
+				}
+			}
+			if(!duplicate){
+				this.selected.push(data);
+			}
 
 			var list = $.grep(Search.lookup(data.children), function( item ) {
 				return item.hide !== true;
