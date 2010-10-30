@@ -51,7 +51,7 @@ jQuery.Controller.extend('IframeController',
 				}, DocumentationController.Helpers);
 
 				$iframeMenuWrapper = $(".iframe_menu_wrapper");
-				$iframeMenuWrapper.phui_positionable({
+				$iframeMenuWrapper.mxui_positionable({
 					my: 'right top',
 					at: 'right bottom'
 				}).trigger('move', el);
