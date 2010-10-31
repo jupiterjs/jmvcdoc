@@ -1,3 +1,4 @@
+steal.loadedProductionCSS = true;
 steal.plugins('jquery/controller', 'jquery/controller/history', 'jquery/view/ejs', 'jquery/model', 'jquery/lang/json', 'jquery/dom/cookie',
 
 'mxui/positionable', 'mxui/menuable').resources( //'jsonp',

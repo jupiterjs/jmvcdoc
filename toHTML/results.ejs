@@ -22,7 +22,7 @@
 			<%}%>
 	<%}%>
 </div>
-<div id='page_results' style="display: <%= hide? 'none' : 'block'%>">
+<div id='results' style="display: <%= hide? 'none' : 'block'%>">
 
     <% for(var i =0; i < list.length; i++){%>
 	<div class="topCorner"><div>&nbsp;</div></div>
@@ -36,9 +36,9 @@
 	    	<%=res.name.replace("jQuery","$")%>
 		</a>
 		<% previous = title%>
-	<%}%>
 	</div>
 	<div class="bottomCorner"><div>&nbsp;</div></div>
+	<%}%>
 
 </div>
 
