@@ -24,21 +24,21 @@
 </div>
 <div id='results' style="display: <%= hide? 'none' : 'block'%>">
 
-    <% for(var i =0; i < list.length; i++){%>
 	<div class="topCorner"><div>&nbsp;</div></div>
 	<div class="content">
-		<% current = list[i];
-		   if(current.hide){ continue; }
-		   title = (current.title ? current.title: current.name);
-           res = calculateDisplay(previous, title);
-		   name = normalizeName(current.name); %>
-	    <a href="<%=current.type == 'prototype' || current.type == 'static' ? 'javascript://': name%>.html" class='result choice <%=current.type%>' style="padding-left: <%= res.length * 20%>px">
-	    	<%=res.name.replace("jQuery","$")%>
-		</a>
-		<% previous = title%>
+	    <% for(var i =0; i < list.length; i++){%>
+			<% current = list[i];
+			   if(current.hide){ continue; }
+			   title = (current.title ? current.title: current.name);
+	           res = calculateDisplay(previous, title);
+			   name = normalizeName(current.name); %>
+		    <a href="<%=current.type == 'prototype' || current.type == 'static' ? 'javascript://': name%>.html" class='result choice <%=current.type%>' style="padding-left: <%= res.length * 20%>px">
+		    	<%=res.name.replace("jQuery","$")%>
+			</a>
+			<% previous = title%>
+		<%}%>
 	</div>
 	<div class="bottomCorner"><div>&nbsp;</div></div>
-	<%}%>
 
 </div>
 
