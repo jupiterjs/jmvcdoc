@@ -78,7 +78,7 @@ h5 {
 	height:35px;
 	line-height:35px;
 }
-.logo-text {
+.logo-text a {
 	color:white;
 	float:right;
 	font-family:arial;
@@ -86,6 +86,11 @@ h5 {
 	left:-8px;
 	position:relative;
 	top:-4px;
+	text-decoration: none;
+	border: none;
+}
+.logo-text a img {
+	border: none;
 }
 .logo-image {
 	left:4px;

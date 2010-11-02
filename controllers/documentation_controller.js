@@ -302,13 +302,17 @@ jQuery.Controller.extend('DocumentationController',
 		if ( data.search ) {
 			$("#search").val(data.search);
 			this.searchCurrent();
-			if (!data.who ) return;
+			if (!data.who) {
+				return;
+			}
 		}
 		if (!data.who ) {
 			this.searchCurrent();
-
-			if ( this.who ) return;
-
+			
+			//hash check is for if we return to the main page
+			if(window.location.hash !== "" && this.who){
+				return;	
+			}
 			data.who = "index"
 		}
 		var who = data.who;
