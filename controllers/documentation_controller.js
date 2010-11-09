@@ -91,7 +91,7 @@ jQuery.Controller.extend('DocumentationController',
 		$("#results").slideDown("fast");
 		this.showDoc(docData)
 	},
-	show: function( who, data ) {
+	show: function( who, trackAnalytics, data ) {
 		this.who = {
 			name: data.name,
 			shortName: data.shortName,
@@ -142,6 +142,9 @@ jQuery.Controller.extend('DocumentationController',
 			this.showDoc(data)
 
 		}
+		
+		// register event on google analytics
+		this.trackAnalytics(who);
 
 	},
 	//event handlers
@@ -324,13 +327,21 @@ jQuery.Controller.extend('DocumentationController',
 			}
 		}
 
+		var self = this;
 		$.ajax({
 			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: this.callback('show', who),
+			success: this.callback('show', who, self.trackAnalytics),
 			error: this.callback('whoNotFound', who),
 			jsonpCallback: "C",
 			dataType: "jsonp"
 		});
+	},
+	
+	trackAnalytics: function( who ) {
+		if (window._gat && window._gat._getTracker && GOOGLE_ANALYTICS_TRACKER_ID) {
+			var pageTracker = _gat._getTracker(GOOGLE_ANALYTICS_TRACKER_ID);
+			pageTracker._trackPageview(DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json");
+		}
 	},
 
 	/**

@@ -80,7 +80,20 @@ steal.plugins('steal/generate').then('//jmvcdoc/resources/helpers', function( st
 				topTemplate = readFile("jmvcdoc/views/top.ejs"),
 				templateName = "jmvcdoc/views/" + name + ".ejs",
 				template = readFile(templateName),
-				html;
+				html,
+				api;
+
+			//check for api
+			if ( json.name === 'api' ) {
+				var names = [];
+				for ( var name in Search._data.list ) {
+					names.push(name)
+				}
+				json.apiHtml = this.helpers.link("[" + names.sort(Search.sortJustStrings).join("]<br/>[") + "]", true);
+				templateName = "jmvcdoc/toHtml/api.ejs";
+				template = readFile(templateName);
+				
+			}
 
 			//print("TEMPLATE: " + fileName);
 			json.isFavorite = false;
