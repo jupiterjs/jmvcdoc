@@ -271,9 +271,14 @@ function() {
 				return classes[i];
 			}
 		}
+		return "javascript"; //makes it default to JS
 	}
 
 	function highlightBlock(block, tabReplace) {
+		//we can have no siblings ...
+		if($(block).parent()[0].nodeName.toLowerCase() != 'pre'){ //code can't have siblings
+			return;
+		}
 		try {
 			var text = blockText(block);
 			var language = blockLanguage(block);
