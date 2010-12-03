@@ -2,6 +2,7 @@ steal.loadedProductionCSS = true;
 steal.plugins('jquery/controller',
  'jquery/controller/history', 
  'jquery/view/ejs',
+  'jquery/controller/view',
  'jquery/lang/json', 
  'jquery/dom/cookie',
  'mxui/positionable', 
