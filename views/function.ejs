@@ -9,7 +9,7 @@
       <div class='param <%= param.optional ? "optional" : ""%>'>
           <label><%= param.name%></label>
           <code>{<%=(param.optional ? 'optional:' : '') +""+(param.type) %>}</code> 
-		   <%= (param.description) %>
+		   <%= link(param.description) %>
       </div>
  <% } %>
 
@@ -17,7 +17,7 @@
      <div class='return'>
          <label>returns</label> 
          <code>{<%=(this.ret.type)%>}</code> 
-		 <%= (this.ret.description)%>
+		 <%= link(this.ret.description)%>
      </div>
  <% } %>   
  

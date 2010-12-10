@@ -24,7 +24,7 @@
 	    <% } %>
 		<% if(this.download){ %>
 	    <div class='download'>
-	        download: <a href='<%= steal.root? steal.root.join(this.download): this.download %>'><%=this.download.match(/[^\/]*$/)[0]%></a>
+	        download: <a href='<%= this.download%>'> <%= this.title || name.replace(/~/g,".") %></a>
 	    </div>
 	    <% } %>
 		<% if(this.test){ %>
