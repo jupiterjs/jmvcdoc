@@ -8,7 +8,7 @@
        var param = this.params[n]; %>  
       <div class='param <%= param.optional ? "optional" : ""%>'>
           <label><%= param.name%></label>
-          <code>{<%=(param.optional ? 'optional:' : '') +""+(param.type) %>}</code> 
+          <code>{<%=(param.optional ? 'optional:' : '') +""+(param.type) %>}<%= param["default"] ? " defaults to "+param["default"] :""%></code> 
 		   <%= link(param.description) %>
       </div>
  <% } %>
