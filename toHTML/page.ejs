@@ -21,7 +21,7 @@
 	                <div id='defaults'>
 						<ul id="menu" class="ui-menu">
 							<li class="ui-menu-item">
-	                    		<a class="menuLink" href="#&amp;search=&#42;&amp;who=index"><span class="menuSpan">Home</span></a>
+	                    		<a class="menuLink" href="<%= jmvcRoot %>index.html"><span class="menuSpan">Home</span></a>
 							</li>
 							<li class="ui-menu-item">						
 		                    	<a class="menuLink" href="#&amp;search=core"><span class="menuSpan">Core</span></a>
@@ -30,17 +30,17 @@
 		                    	<a class="menuLink" href="#favorites"><span class="menuSpan">Favorites</span></a>
 							</li>
 							<li class="ui-menu-item">						
-								<a class="menuLink" href="#&who=follow" title="Follow"><span class="menuSpan red">Follow</span></a>
+								<a class="menuLink" href="<%= jmvcRoot %>follow.html" title="Follow"><span class="menuSpan red">Follow</span></a>
 							</li>
 							<li class="ui-menu-item">						
-								<a class="menuLink" href="#&amp;who=contribute" title="Contribute"><span class="menuSpan red">Contribute</span></a>
+								<a class="menuLink" href="<%= jmvcRoot %>contribute.html" title="Contribute"><span class="menuSpan red">Contribute</span></a>
 							</li>							
 							<li class="ui-menu-item">						
-								<a class="menuLink" href="#&amp;who=code" title="Code"><span class="menuSpan red">Code</span></a>
+								<a class="menuLink" href="<%= jmvcRoot %>code.html" title="Code"><span class="menuSpan red">Code</span></a>
 							</li>
 						</ul>
 	            	</div>
-	                <div class="logo-text"><a href='http://javascriptmvc.com'>JavaScript<img src='<%= jmvcRoot %>documentjs/jmvcdoc/images/logo80x30.png' class="logo-image"/></a></div>
+	                <div class="logo-text"><a href='<%= jmvcRoot %>index.html'>JavaScript<img src='<%= jmvcRoot %>documentjs/jmvcdoc/images/logo80x30.png' class="logo-image"/></a></div>
                 </div>
 				<div class="bottomCorner">
 					<div class="right"></div>
@@ -67,6 +67,7 @@
         </div>
 		<script type='text/javascript'>
             DOCS_LOCATION = "<%= jmvcRoot %><%= args.path %>/"
+			GOOGLE_ANALYTICS_TRACKER_ID = "<%= args.analyticsAct %>";
             <% if(args.commentsLoc){ %>
             COMMENTS_LOCATION = "<%= args.commentsLoc %>";
             <% } %>
