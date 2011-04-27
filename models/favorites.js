@@ -34,7 +34,4 @@ Favorites = {
 		if ( favs[f].name == who.name ) return true;
 		return false;
 	}
-
-
-
 }

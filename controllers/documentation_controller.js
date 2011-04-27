@@ -3,10 +3,10 @@
  * 
  * Runs the documentation
  */
-jQuery.Controller.extend('DocumentationController',
+jQuery.Controller('Documentation',
 /* @Static */
 {
-	onDocument: true
+
 },
 /* @Prototype */
 {
@@ -15,6 +15,90 @@ jQuery.Controller.extend('DocumentationController',
 	 */
 	init: function() {
 		this.selected = [];
+		
+		var search = $("#search")
+			searchText = search.attr('disabled', false).val(),
+			self = this;
+		
+		this.searchDeferred = Search.load();
+		
+		this.searchDeferred.done(function(data){
+			hljs.start();
+			search.attr('disabled', false)
+				.val(searchText);
+			search[0].focus();
+			
+			if(!this.historyChanged){
+				self["{window} hashchange"]();
+			}
+		})
+		// probably need to 
+	},
+	"{window} hashchange" : function(){
+		this.historyChanged = true;
+		
+		if(window.location.hash=="#favorites"){
+			// favorites was clicked on
+			
+			this.selected = [];
+			$("#search").val("favorites");
+			var list = Favorites.findAll();
+			$("#left").html("//jmvcdoc/views/results.ejs", {
+				list: list,
+				selected: this.selected,
+				hide: false
+			}, DocumentationHelpers)
+			if (!list.length ) {
+				$('#doc').html("//jmvcdoc/views/favorite.ejs", {})
+			}
+		} else {
+			var data = $.deparam( window.location.hash.substr(2) ),
+				self = this;
+			
+
+			this.searchDeferred.done(function(){
+				self.handleHistoryChange(data)
+			})
+		}
+	},
+	hashData : function(data){
+		
+	},
+	handleHistoryChange: function( data ) {
+		
+		if ( data.search ) {
+			$("#search").val(data.search);
+			this.searchCurrent();
+			if (!data.who) {
+				return;
+			}
+		}
+		if (!data.who ) {
+			this.searchCurrent();
+			
+			//hash check is for if we return to the main page
+			if(window.location.hash !== "" && this.who){
+				return;	
+			}
+			data.who = "index"
+		}
+		var who = data.who;
+		//might need to remove everyone under you from selected
+		for ( var i = 0; i < this.selected.length; i++ ) {
+			if ( this.selected[i].name == who ) {
+				this.selected.splice(i, this.selected.length - i)
+				break;
+			}
+		}
+
+		var self = this;
+		$.ajax({
+			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
+			success: this.callback('show', who, self.trackAnalytics),
+			error: this.callback('whoNotFound', who),
+			jsonpCallback: "C",
+			dataType: "jsonp"
+		});
 	},
 	/**
 	 * Searches with the current value in #search or searches for 'home'
@@ -138,7 +222,7 @@ jQuery.Controller.extend('DocumentationController',
 				}, DocumentationHelpers)
 			}
 			$(".result").removeClass("picked")
-			$(".result[href=#&who=" + who + "]").addClass("picked").focus()
+			$(".result[href=#\\&who\\=" + who.replace(/\./g, "\\.") + "]").addClass("picked").focus()
 			this.showDoc(data)
 
 		}
@@ -254,88 +338,9 @@ jQuery.Controller.extend('DocumentationController',
 			el.addClass("favoriteoff")
 		}
 	},
-	"history.favorites.index subscribe": function( called, data ) {
-		this.selected = [];
-		$("#search").val("favorites")
-		var list = Favorites.findAll();
-		$("#left").html("//jmvcdoc/views/results.ejs", {
-			list: list,
-			selected: this.selected,
-			hide: false
-		}, DocumentationHelpers)
-		if (!list.length ) $('#doc').html("//jmvcdoc/views/favorite.ejs", {})
-	},
 
-	ready: function() {
-/*var self = this;
-        this.find("#documentation").mxui_filler({parent: $(window)});
-        this.find("#bottom").mxui_filler();
-        this.find("#bottom").bind("resize", function(){
-            var h = $(this).height();
-            self.find("#left").height(h);
-            self.find("#doc_container").height(h);    
-        });*/
 
-		this.loaded = true;
-		hljs.start();
-		this.loadText = $("#search").val();
-
-		$("#search").val("Loading ...")
-		Search.load(this.callback('setSearchReady'));
-	},
-	setSearchReady: function() {
-		this.searchReady = true;
-		//do what you would normally do
-		$("#search").attr('disabled', false)
-
-		$("#search").val(this.loadText).focus();
-		if ( this.loadHistoryData ) {
-			//need a timeout to allow reset of C function
-			//by jQuery
-			var self = this;
-			setTimeout(function() {
-				self.handleHistoryChange(self.loadHistoryData);
-			}, 1)
-		}
-
-	},
-
-	handleHistoryChange: function( data ) {
-
-		if ( data.search ) {
-			$("#search").val(data.search);
-			this.searchCurrent();
-			if (!data.who) {
-				return;
-			}
-		}
-		if (!data.who ) {
-			this.searchCurrent();
-			
-			//hash check is for if we return to the main page
-			if(window.location.hash !== "" && this.who){
-				return;	
-			}
-			data.who = "index"
-		}
-		var who = data.who;
-		//might need to remove everyone under you from selected
-		for ( var i = 0; i < this.selected.length; i++ ) {
-			if ( this.selected[i].name == who ) {
-				this.selected.splice(i, this.selected.length - i)
-				break;
-			}
-		}
-
-		var self = this;
-		$.ajax({
-			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: this.callback('show', who, self.trackAnalytics),
-			error: this.callback('whoNotFound', who),
-			jsonpCallback: "C",
-			dataType: "jsonp"
-		});
-	},
+	
 	
 	trackAnalytics: function( who ) {
 		if (window._gat && window._gat._getTracker && GOOGLE_ANALYTICS_TRACKER_ID) {
@@ -348,7 +353,8 @@ jQuery.Controller.extend('DocumentationController',
 	 * A history event.  Only want to act if search data is available.
 	 */
 	"history.index subscribe": function( called, data ) {
-
+		
+		
 		if (!this.searchReady ) { //if search is not ready .. wait until it is
 			this.loadHistoryData = data;
 			return;

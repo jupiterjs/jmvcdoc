@@ -3,7 +3,7 @@
  * 
  * Handles @demo logic
  */
-jQuery.Controller.extend('DemoController',
+jQuery.Controller('DemoController',
 /* @Static */
 {},
 /* @Prototype */

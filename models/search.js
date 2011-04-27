@@ -1,17 +1,14 @@
-$.Class.extend('Search', {
+$.Class('Search', {
 	load: function( callback ) {
 
-		$.ajax({
+		return $.ajax({
 			url: DOCS_LOCATION + "searchData.json",
 			success: this.callback(['setData', callback]),
 			jsonpCallback: "C",
-			dataType: "jsonp"
+			dataType: "jsonp",
+			cache: true
 		})
 
-		/**$.jsonp({
-		 url: DOCS_LOCATION + "searchData.json",
-		 success: this.callback(['setData', callback])
-		 });**/
 	},
 	setData: function( data ) {
 		this._data = data;
