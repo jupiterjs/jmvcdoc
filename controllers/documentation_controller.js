@@ -15,31 +15,29 @@ jQuery.Controller('Documentation',
 	 */
 	init: function() {
 		this.selected = [];
-		
+
 		var search = $("#search")
-			searchText = search.attr('disabled', false).val(),
+		searchText = search.attr('disabled', false).val(),
 			self = this;
-		
+
 		this.searchDeferred = Search.load();
-		
-		this.searchDeferred.done(function(data){
+
+		this.searchDeferred.done(function( data ) {
 			hljs.start();
-			search.attr('disabled', false)
-				.val(searchText);
+			search.attr('disabled', false).val(searchText);
 			search[0].focus();
-			
-			if(!this.historyChanged){
+
+			if (!this.historyChanged ) {
 				self["{window} hashchange"]();
 			}
 		})
 		// probably need to 
 	},
-	"{window} hashchange" : function(){
+	"{window} hashchange": function() {
 		this.historyChanged = true;
-		
-		if(window.location.hash=="#favorites"){
+
+		if ( window.location.hash == "#favorites" ) {
 			// favorites was clicked on
-			
 			this.selected = [];
 			$("#search").val("favorites");
 			var list = Favorites.findAll();
@@ -52,33 +50,33 @@ jQuery.Controller('Documentation',
 				$('#doc').html("//jmvcdoc/views/favorite.ejs", {})
 			}
 		} else {
-			var data = $.deparam( window.location.hash.substr(2) ),
+			var data = $.String.deparam(window.location.hash.substr(2)),
 				self = this;
-			
 
-			this.searchDeferred.done(function(){
+
+			this.searchDeferred.done(function() {
 				self.handleHistoryChange(data)
 			})
 		}
 	},
-	hashData : function(data){
-		
+	hashData: function( data ) {
+
 	},
 	handleHistoryChange: function( data ) {
-		
+
 		if ( data.search ) {
 			$("#search").val(data.search);
 			this.searchCurrent();
-			if (!data.who) {
+			if (!data.who ) {
 				return;
 			}
 		}
 		if (!data.who ) {
 			this.searchCurrent();
-			
+
 			//hash check is for if we return to the main page
-			if(window.location.hash !== "" && this.who){
-				return;	
+			if ( window.location.hash !== "" && this.who ) {
+				return;
 			}
 			data.who = "index"
 		}
@@ -94,7 +92,7 @@ jQuery.Controller('Documentation',
 		var self = this;
 		$.ajax({
 			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: this.callback('show', who, self.trackAnalytics),
+			success: this.callback('show', data, self.trackAnalytics),
 			error: this.callback('whoNotFound', who),
 			jsonpCallback: "C",
 			dataType: "jsonp"
@@ -164,7 +162,7 @@ jQuery.Controller('Documentation',
 		$("#disqus_thread").children().remove();
 		if ( docData.name != "index" && typeof(COMMENTS_LOCATION) != "undefined" && $("#disqus_thread").length ) {
 			window.disqus_title = docData.name;
-			window.disqus_url = "http://"+location.host+"/docs/"+docData.name+".html";
+			window.disqus_url = "http://" + location.host + "/docs/" + docData.name + ".html";
 			window.disqus_identifier = docData.name;
 			steal.insertHead(COMMENTS_LOCATION);
 		}
@@ -175,7 +173,7 @@ jQuery.Controller('Documentation',
 		$("#results").slideDown("fast");
 		this.showDoc(docData)
 	},
-	show: function( who, trackAnalytics, data ) {
+	show: function( historyData, trackAnalytics, data ) {
 		this.who = {
 			name: data.name,
 			shortName: data.shortName,
@@ -184,12 +182,12 @@ jQuery.Controller('Documentation',
 		data.isFavorite = Favorites.isFavorite(data);
 		if ( data.children && data.children.length ) { //we have a class or constructor
 			var duplicate = false;
-			for(var i=0; i<this.selected.length; i++){
-				if(this.selected[i].name == data.name) {
+			for ( var i = 0; i < this.selected.length; i++ ) {
+				if ( this.selected[i].name == data.name ) {
 					duplicate = true;
 				}
 			}
-			if(!duplicate){
+			if (!duplicate ) {
 				this.selected.push(data);
 			}
 
@@ -222,13 +220,19 @@ jQuery.Controller('Documentation',
 				}, DocumentationHelpers)
 			}
 			$(".result").removeClass("picked")
-			$(".result[href=#\\&who\\=" + who.replace(/\./g, "\\.") + "]").addClass("picked").focus()
+			$(".result[href=#\\&who\\=" + historyData.who.replace(/\./g, "\\.") + "]").addClass("picked").focus()
 			this.showDoc(data)
 
 		}
+
+		//if there is a where, try to go there
+		if(historyData.where){
+			var where = $("h2:contains("+historyData.where+"), h3:contains("+historyData.where+")").offset();
+			window.scrollTo(0,where.top)
+		}
 		
 		// register event on google analytics
-		this.trackAnalytics(who);
+		this.trackAnalytics(historyData.who);
 
 	},
 	//event handlers
@@ -340,10 +344,10 @@ jQuery.Controller('Documentation',
 	},
 
 
-	
-	
+
+
 	trackAnalytics: function( who ) {
-		if (window._gat && window._gat._getTracker && GOOGLE_ANALYTICS_TRACKER_ID) {
+		if ( window._gat && window._gat._getTracker && GOOGLE_ANALYTICS_TRACKER_ID ) {
 			var pageTracker = _gat._getTracker(GOOGLE_ANALYTICS_TRACKER_ID);
 			pageTracker._trackPageview(DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json");
 		}
@@ -353,8 +357,8 @@ jQuery.Controller('Documentation',
 	 * A history event.  Only want to act if search data is available.
 	 */
 	"history.index subscribe": function( called, data ) {
-		
-		
+
+
 		if (!this.searchReady ) { //if search is not ready .. wait until it is
 			this.loadHistoryData = data;
 			return;
