@@ -1,3 +1,4 @@
+steal.plugins('jquery/dom/cookie').then(function(){
 Favorites = {
 	toggle: function( who ) {
 		var favs = this.findAll();
@@ -34,4 +35,5 @@ Favorites = {
 		if ( favs[f].name == who.name ) return true;
 		return false;
 	}
-}
+};
+})

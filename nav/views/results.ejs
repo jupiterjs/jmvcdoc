@@ -15,7 +15,9 @@
 		</div>
 		<div class="content">
 			    <a href="#&who=<%=name%>" class='selected choice <%=current.type%>' style="padding-left: <%= res.length * 20%>px">
-			    	<span class='remove' title="close"></span>
+			    	<%if(name != "index") { %>
+						<span class='remove' title="close"></span>
+					<%}%>
 					<%=res.name.replace("jQuery.","$.")%>
 					
 				</a>

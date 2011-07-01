@@ -1,10 +1,11 @@
+steal.plugins('jquery').then(function(){
+
 /*
 Syntax highlighting with language autodetection.
 http://softwaremaniacs.org/soft/highlight/
 */
 
-var hljs = new
-function() {
+hljs = new function() {
 	var LANGUAGES = {}
 	var selected_languages = {};
 	var me = {};
@@ -467,5 +468,16 @@ function() {
 		compileKeywords();
 	}
 }();
+
+$.fn.highlight = function() {
+	this.each(function() {
+		hljs.highlightBlock(this)
+	})
+	return this;
+}
+
+}).then('languages/www','languages/javascript').then(function(){
+	hljs.start();
+});
 
 //var initHighlightingOnLoad = hljs.initHighlightingOnLoad;

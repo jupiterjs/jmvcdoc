@@ -79,12 +79,12 @@ DocumentationHelpers = {
 			if (/^["']/.test(first) ) {
 				first = first.substr(1, first.length - 2)
 			}
-			var url = Search._data.list[first] ? first : null;
+			var url = Doc.findOne({name: first}) || null;
 			if ( url ) {
 				if (!n ) {
 					n = dontReplace ? first : first.replace(/\.prototype|\.static/, "")
 				}
-				return "<a href='#&who=" + url + "'>" + n + "</a>"
+				return "<a href='#&who=" + url.name + "'>" + n + "</a>"
 			} else if ( typeof first == 'string' && first.match(/^https?|www\.|#/) ) {
 				return "<a href='" + first + "'>" + (n || first) + "</a>"
 			}

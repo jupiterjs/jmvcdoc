@@ -14,6 +14,9 @@ jQuery.Controller('Documentation',
 	 * Keeps track of who is selected
 	 */
 	init: function() {
+		// keeps track of who is selected ... this should probably be only one thing ... 
+		// pages shouldn't have multiple parents
+		// makes it hard
 		this.selected = [];
 
 		var search = $("#search")
@@ -90,13 +93,9 @@ jQuery.Controller('Documentation',
 		}
 
 		var self = this;
-		$.ajax({
-			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: this.callback('show', data, self.trackAnalytics),
-			error: this.callback('whoNotFound', who),
-			jsonpCallback: "C",
-			dataType: "jsonp"
-		});
+		Docs.findOne(who, this.callback('show', data, self.trackAnalytics),
+			this.callback('whoNotFound', who))
+
 	},
 	/**
 	 * Searches with the current value in #search or searches for 'home'
@@ -120,52 +119,20 @@ jQuery.Controller('Documentation',
 			hide: false
 		}, DocumentationHelpers)
 	},
+	/**
+	 * For some content, puts it in the page ....
+	 * @param {Object} docData
+	 */
 	showDoc: function( docData ) {
-		$("#doc").html("//jmvcdoc/views/" + docData.type.toLowerCase() + ".ejs", docData, DocumentationHelpers).find("h1.addFavorite").
-		append('&nbsp;<span class="favorite favorite' + (docData.isFavorite ? 'on' : 'off') + '">&nbsp;&nbsp;&nbsp;</span>');
-		//setTimeout(function(){
-		$("#doc_container").scrollTop(0)
-		//},100);
-		$("#doc code").highlight();
-		//check for api
-		if ( $("#api").length ) {
-			var names = [];
-			for ( var name in Search._data.list ) {
-				names.push(name)
-			}
-			$("#api").html(
-			DocumentationHelpers.link("[" + names.sort(Search.sortJustStrings).join("]<br/>[") + "]", true))
-		}
+		// puts the data 
+		$("#doc").html("//jmvcdoc/views/" + docData.type.toLowerCase() + ".ejs", docData, DocumentationHelpers)
+			.trigger("docUpdated",[docData]);
+		
+		
+		
 
 
-		// cleanup iframe menu when navigating to another page
-		if ( $(".iframe_menu_wrapper").length ) $(".iframe_menu_wrapper").remove();
-
-		// hookup iframe ui
-		var $iframe_wrapper = $(".iframe_wrapper");
-		if ( $iframe_wrapper.length ) $iframe_wrapper.iframe();
-
-		// hookup demo ui
-		var $demo_wrapper = $(".demo_wrapper");
-		if ( $demo_wrapper.length ) $demo_wrapper.demo();
-
-		// add absolute paths to image tags
-		$(".image_tag").each(function() {
-			var imageTagEl = $(this),
-				relativePath = imageTagEl.attr("src"),
-				absolutePath = steal.root.join(relativePath);
-			imageTagEl.attr("src", absolutePath);
-		});
-
-
-		// add disqus comments
-		$("#disqus_thread").children().remove();
-		if ( docData.name != "index" && typeof(COMMENTS_LOCATION) != "undefined" && $("#disqus_thread").length ) {
-			window.disqus_title = docData.name;
-			window.disqus_url = "http://" + location.host + "/docs/" + docData.name + ".html";
-			window.disqus_identifier = docData.name;
-			steal.insertHead(COMMENTS_LOCATION);
-		}
+		
 	},
 
 	showResultsAndDoc: function( searchResultsData, docData ) {
@@ -173,6 +140,9 @@ jQuery.Controller('Documentation',
 		$("#results").slideDown("fast");
 		this.showDoc(docData)
 	},
+	
+	
+	
 	show: function( historyData, trackAnalytics, data ) {
 		this.who = {
 			name: data.name,
@@ -180,6 +150,23 @@ jQuery.Controller('Documentation',
 			tag: data.name
 		};
 		data.isFavorite = Favorites.isFavorite(data);
+		
+		
+		// if there's nothing selected, lets populate it ...
+		
+		if ( ! this.selected.length  ) {
+			// look up parents until you don't have one
+			var cur = data;
+			while(cur && ( cur.parents || cur.parent) ){
+				cur = cur.parents ? Search.lookup(cur.parents)[0] : Search.lookup([cur.parent])[0];
+				if(cur && cur.type !== 'prototype' && cur.type !== 'static' ) {
+					this.selected.unshift(cur)
+				}
+				
+			}
+		}
+		
+		
 		if ( data.children && data.children.length ) { //we have a class or constructor
 			var duplicate = false;
 			for ( var i = 0; i < this.selected.length; i++ ) {
@@ -213,6 +200,8 @@ jQuery.Controller('Documentation',
 			//see if we can pick it
 			if ( $("#results a").length == 0 ) {
 				//we should probably try to get first parent as result, but whatever ...
+				
+				
 				$("#left").html("//jmvcdoc/views/results.ejs", {
 					list: Search.find(""),
 					selected: this.selected,
@@ -318,19 +307,22 @@ jQuery.Controller('Documentation',
 	},
 	".remove click": function( el, ev ) {
 		ev.stopImmediatePropagation();
-		this.selected.pop();
-		//fire to history
-		if ( this.selected.length ) {
-			var who = this.selected.pop().name;
+		ev.preventDefault();
+		var achoice = el.closest('.content').prevAll('.content:last').find('.choice')
+		this.selected = [];
+		if(achoice.length){
 			$("#results").slideUp("fast", function() {
-				window.location.hash = "#&who=" + who;
+				window.location = achoice.attr('href');
 			})
+			
 		} else {
-			var self = this;
 			$("#results").slideUp("fast", function() {
 				window.location.hash = "#"
 			})
 		}
+		
+		// might remove something else ...
+		
 	},
 	".favorite click": function( el ) {
 		var isFavorite = Favorites.toggle(this.who)
