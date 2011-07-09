@@ -1,4 +1,4 @@
-steal.plugins('jquery/class').then('favorites',function(){
+steal('jquery/class').then('./favorites.js',function(){
 	var data;
 	
 	$.ajaxSetup({

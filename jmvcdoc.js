@@ -1,5 +1,5 @@
 steal.loadedProductionCSS = true;
-steal.plugins(
+steal(
 	'jmvcdoc/content',
 	'jmvcdoc/nav',
 	'jmvcdoc/search',

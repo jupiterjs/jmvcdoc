@@ -17,9 +17,9 @@
                 src='../../steal/steal.js'>
         </script>
 		<script type='text/javascript'>
-			steal.plugins('jmvcdoc/nav',
+			steal('jmvcdoc/nav',
 				'jquery/event/hashchange',
-				'jquery/lang/deparam').then(function(){
+				'jquery/lang/deparam',function(){
 				var clientState = new $.Observe({});
 				
 				$('#nav').jmvcdoc_nav({clientState : clientState});

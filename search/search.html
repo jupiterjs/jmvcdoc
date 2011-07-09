@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Jmvcdoc.Content</title>
+		<title>Jmvcdoc.Search</title>
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -11,21 +11,21 @@
         </style>
 	</head>
 	<body>
-	    <h1>Jmvcdoc.Content Demo</h1>
-		<div id='content'></div>
+	    <h1>Jmvcdoc.Search Demo</h1>
+		<input id='search'/>
 		<script type='text/javascript' 
                 src='../../steal/steal.js'>
         </script>
 		<script type='text/javascript'>
-			steal('jmvcdoc/content',
+			steal('jmvcdoc/search',
 				'jquery/event/hashchange',
-				'jquery/lang/deparam', function(){
+				'jquery/lang/deparam',function(){
 				var clientState = new $.Observe({});
 				
-				$('#content').jmvcdoc_content({clientState : clientState});
+				$('#search').jmvcdoc_search({clientState : clientState});
 				
 				Doc.location = steal.root.join("jmvc/docs/")
-			
+				START_TIME = new Date();
 				Doc.load(function(){
 					var hashchange = function(){
 						var p = window.location.hash.substr(2);

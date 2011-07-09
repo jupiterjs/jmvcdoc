@@ -1,4 +1,4 @@
-steal.plugins('jquery/dom/cookie').then(function(){
+steal('jquery/dom/cookie',function(){
 Favorites = {
 	toggle: function( who ) {
 		var favs = this.findAll();

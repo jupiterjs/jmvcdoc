@@ -1,21 +1,21 @@
-steal.plugins('jquery/controller',
+steal('jquery/controller',
 	'jquery/lang/observe/delegate',
 	'jquery/view/ejs',
-	'jmvcdoc/highlight')
-	.then(
-		'//jmvcdoc/resources/helpers',
-		'//jmvcdoc/models/search',
-		'../style.css',
-		'doc_updated',
+	'jmvcdoc/highlight',
+	
+	'jmvcdoc/resources/helpers.js',
+	'jmvcdoc/models/search.js',
+	'../style.css',
+	'./doc_updated.js').then(
 
-	'views/attribute.ejs',
-	'views/class.ejs',
-	'views/constructor.ejs',
-	'views/favorite.ejs',
-	'views/function.ejs',
-	'views/page.ejs', 
-	'views/results.ejs', 
-	'views/top.ejs', 
+	'./views/attribute.ejs',
+	'./views/class.ejs',
+	'./views/constructor.ejs',
+	'./views/favorite.ejs',
+	'./views/function.ejs',
+	'./views/page.ejs', 
+	'./views/results.ejs', 
+	'./views/top.ejs', 
 		function($){
 
 /**

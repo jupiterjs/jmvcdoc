@@ -1,4 +1,4 @@
-steal.plugins('jquery','jmvcdoc/demo').then(function($){
+steal('jquery','jmvcdoc/demo',function($){
 	
 	
 	$(document).bind('docUpdated', function(ev, docData){

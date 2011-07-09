@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller').then(function(){
+steal('jquery/controller',function(){
 
 /**
  * @tag home

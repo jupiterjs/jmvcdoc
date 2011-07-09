@@ -1,8 +1,8 @@
-steal.plugins('jquery/controller',
+steal('jquery/controller',
 	'jquery/lang/observe/delegate',
-	'jquery/view/ejs')
-	.then('//jmvcdoc/models/search',
-		'//jmvcdoc/resources/helpers',
+	'jquery/view/ejs',
+	'jmvcdoc/models/search.js',
+		'jmvcdoc/resources/helpers.js',
 		'../style.css',function($){
 
 /**

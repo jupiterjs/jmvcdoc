@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function(){
+steal('jquery',function(){
 
 /*
 Syntax highlighting with language autodetection.
@@ -476,7 +476,7 @@ $.fn.highlight = function() {
 	return this;
 }
 
-}).then('languages/www','languages/javascript').then(function(){
+}).then('./languages/www.js','./languages/javascript.js',function(){
 	hljs.start();
 });
 
