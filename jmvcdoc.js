@@ -2,6 +2,7 @@ steal.loadedProductionCSS = true;
 steal.plugins(
 	'jmvcdoc/content',
 	'jmvcdoc/nav',
+	'jmvcdoc/search',
 	'jquery/lang/deparam'
 	/*,
 	
@@ -22,6 +23,7 @@ steal.plugins(
 				
 	$('#nav').jmvcdoc_nav({clientState : clientState});
 	$("#doc").jmvcdoc_content({clientState : clientState});
+	$("#search").jmvcdoc_search({clientState : clientState});
 	//Doc.location = steal.root.join("jmvc/docs/")
 	
 	

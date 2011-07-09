@@ -111,32 +111,110 @@ steal.plugins('jquery/class').then('favorites',function(){
 		 */
 		findAll: function(params){
 			var valWasEmpty, level = 2;
-			var val = val.toLowerCase();
+			var val = params.search.toLowerCase();
 	
 			if (!val || val === "*" ) {
 				val = "home"; // return the core stuff
 				valWasEmpty = true;
 			}
 	
-			if ( val == "favorites" ) return Favorites.findAll()
-	
-			var current = this._data;
+			if (val == "favorites") {
+				return Favorites.findAll()
+			}
+
+			var current = this.searchData();
+			
 			for ( var i = 0; i < level; i++ ) {
 				if ( val.length <= i || !current ) break;
 				var letter = val.substring(i, i + 1);
 				current = current[letter];
 			}
+			
 			var list = [];
 			if ( current && val.length > level ) {
 				//make sure everything in current is ok
 				var lookedup = this.lookup(current.list);
 				for ( var i = 0; i < lookedup.length; i++ ) {
-					if ( this.matches(lookedup[i], val, valWasEmpty) ) list.push(lookedup[i])
+					if (this.matches(lookedup[i], val, valWasEmpty)) {
+						list.push(lookedup[i])
+					}
 				}
 			} else if ( current ) {
 				list = this.lookup(current.list);
 			}
-			return list.sort(this.sortFn);
+			return list.sort(Search.sortFn);
+		},
+		searchData : function(){
+			//returns the search data ...
+			
+			if(this._searchData){
+				return this._searchData;
+			}
+			
+			if(window.localStorage && window.JMVCDOC_TIMESTAMP){
+				var json = window.localStorage["jmvcDocSearch"+window.JMVCDOC_TIMESTAMP]
+				if(json){
+					return this._searchData = $.parseJSON(json);
+				}
+			}
+			
+			//create searchData
+			var searchData = this._searchData = {};
+			var parts,c,
+				addTagToSearchData = function( data, tag ) {
+		
+					var letter, l, depth = 3,
+						current = searchData;
+		
+					for ( l = 0; l < depth; l++ ) {
+						letter = tag.substring(l, l + 1);
+						if (!current[letter] ) {
+							current[letter] = {};
+							current[letter].list = [];
+						}
+						if ( $.inArray(current[letter].list, data) == -1 ) {
+							current[letter].list.push(data);
+						}
+						current = current[letter];
+					}
+				};
+			
+			for(var fullName in this._data){
+				c = this._data[fullName]
+				
+				parts = fullName.split(".");
+				for ( p = 0; p < parts.length; p++ ) {
+					part = parts[p].toLowerCase();
+					if ( part == "jquery" ){
+						continue;
+					}
+					addTagToSearchData(fullName, part)
+				}
+				//now add tags if there are tags
+				if ( c.tags ) {
+					for ( var t = 0; t < c.tags.length; t++ ){
+						addTagToSearchData(fullName, c.tags[t]);
+					}
+				}
+			}	
+			
+			return this._searchData;
+		},
+		matches: function( who, val, valWasEmpty ) {
+			if (!valWasEmpty && who.name.toLowerCase().indexOf(val) > -1 ) return true;
+			if ( who.tags ) {
+				for ( var t = 0; t < who.tags.length; t++ ) {
+					if ( who.tags[t].toLowerCase().indexOf(val) > -1 ) return true;
+				}
+			}
+			return false;
+		},
+		lookup: function( names ) {
+			var res = [];
+			for ( var i = 0; i < names.length; i++ ) {
+				this._data[names[i]] && res.push(this._data[names[i]])
+			}
+			return res;
 		}
 	},{
 		init : function(attrs){
@@ -153,77 +231,10 @@ steal.plugins('jquery/class').then('favorites',function(){
 	});
 	
 
-$.Class('Docs',{
-	findOne : function(who, success, error){
-		
-		return $.ajax({
-			url: DOCS_LOCATION + who.replace(/ /g, "_").replace(/&#46;/g, ".") + ".json",
-			success: success,
-			error: error,
-			jsonpCallback: "C",
-			dataType: "jsonp"
-		});
-		
-	}
-},{})
-
 $.Class('Search', {
-	load: function( callback ) {
-
-		return $.ajax({
-			url: DOCS_LOCATION + "searchData.json",
-			success: this.callback(['setData', callback]),
-			jsonpCallback: "C",
-			dataType: "jsonp",
-			cache: true
-		})
-
-	},
-	setData: function( data ) {
-		this._data = data;
-		return arguments;
-	},
-	find: function( val ) {
-		var valWasEmpty, level = 2;
-		var val = val.toLowerCase();
-
-		if (!val || val === "*" ) {
-			val = "home"; // return the core stuff
-			valWasEmpty = true;
-		}
-
-		if ( val == "favorites" ) return Favorites.findAll()
-
-		var current = this._data;
-		for ( var i = 0; i < level; i++ ) {
-			if ( val.length <= i || !current ) break;
-			var letter = val.substring(i, i + 1);
-			current = current[letter];
-		}
-		var list = [];
-		if ( current && val.length > level ) {
-			//make sure everything in current is ok
-			var lookedup = this.lookup(current.list);
-			for ( var i = 0; i < lookedup.length; i++ ) {
-				if ( this.matches(lookedup[i], val, valWasEmpty) ) list.push(lookedup[i])
-			}
-		} else if ( current ) {
-			list = this.lookup(current.list);
-		}
-		return list.sort(this.sortFn);
-	},
-	matches: function( who, val, valWasEmpty ) {
-		if (!valWasEmpty && who.name.toLowerCase().indexOf(val) > -1 ) return true;
-		if ( who.tags ) {
-			for ( var t = 0; t < who.tags.length; t++ ) {
-				if ( who.tags[t].toLowerCase().indexOf(val) > -1 ) return true;
-			}
-		}
-		return false;
-	},
 	sortFn: function( a, b ) {
-		var aHasOrder = a.order !== null,
-			bHasOrder = b.order !== null
+		var aHasOrder = a.order !== undefined,
+			bHasOrder = b.order !== undefined
 		if(aHasOrder && bHasOrder){
 			return a.order - b.order;
 		} 
@@ -254,13 +265,6 @@ $.Class('Search', {
 		else aname > bname
 		return 1
 		return 0;
-	},
-	lookup: function( names ) {
-		var res = [];
-		for ( var i = 0; i < names.length; i++ ) {
-			this._data.list[names[i]] && res.push(this._data.list[names[i]])
-		}
-		return res;
 	}
 }, {})
 	

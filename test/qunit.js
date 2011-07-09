@@ -19,7 +19,7 @@ test("findOne by name", function(){
 		ok(Class.name, "jQuery.Class")
 		//var children = Class.children();
 		
-		equal(Class.children.length,2, "class has children")
+		equal(Class.children().length,2, "class has children")
 				
 		start();
 	});
@@ -33,7 +33,7 @@ test("findOne all by name", function(){
 		start();
 	});
 });
-	return;
+
 test("findAll by search", function(){
 	stop();
 	Doc.location = steal.root.join("jmvc/docs/");
@@ -44,8 +44,17 @@ test("findAll by search", function(){
 		var docs = Doc.findAll({
 			search: "Class"
 		});
-		ok(Class);
-		ok(Class.name, "jQuery.Class")
+		
+		ok(docs.length, "we have things wiht class")
+		
+		for(var i =0; i < docs.length; i++){
+			if(! /class/i.test( docs[i].name )) {
+				ok(false, "Something doesn't have the name "+docs[i].name)
+			}
+		}
+		
+		//ok(Class);
+		//ok(Class.name, "jQuery.Class")
 		//var children = Class.children();
 		start();
 	});

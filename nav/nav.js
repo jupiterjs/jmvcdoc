@@ -82,7 +82,28 @@ $.Controller('Jmvcdoc.Nav',
 		}
 	},
 	"{clientState} search change" : function(clientState, ev, attr, how, val){
-		var res = Search.findOne(val);
+		var res = Doc.findAll({
+			search: val
+		});
+		this.element.html("//jmvcdoc/nav/views/results.ejs", {
+			list: res,
+			selected: [],
+			hide: false
+		}, DocumentationHelpers);
+	},
+	"a mouseover": function( el ) {
+		this._highlight(el)
+	},
+	"a mouseout": function( el ) {
+		el.removeClass("highlight")
+	},
+	_highlight: function( el ) {
+		if (!this._isInvalidMenuItem(el) ) {
+			el.addClass("highlight")
+		}
+	},
+	_isInvalidMenuItem: function( el ) {
+		return (el.hasClass("prototype") || el.hasClass("static"))
 	}
 })
 
