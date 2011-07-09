@@ -32,7 +32,8 @@ $.Controller('Jmvcdoc.Nav',
 		
 		// get parent ...
 		
-		while(!focus.childDocs || !focus.childDocs.length || /static|prototype/i.test( focus.type ) ) {
+		while(focus.parents && 
+			( !focus.childDocs || !focus.childDocs.length || /static|prototype/i.test( focus.type ) ) ) {
 			focus =  Doc.findOne({name: focus.parents[0]})
 		}
 		var path = [focus], curParent = focus;

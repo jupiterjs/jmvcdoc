@@ -224,7 +224,7 @@ steal('jquery/class').then('./favorites.js',function(){
 		children : function(){
 			var data = this.Class._data;
 			//get the child docs and their order ...
-			return $.map(this.childDocs, function(docName){
+			return $.map(this.childDocs || [], function(docName){
 				return new Doc( data[docName] );
 			}).sort(Search.sortFn)
 		}
