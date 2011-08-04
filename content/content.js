@@ -34,6 +34,7 @@ $.Controller('Jmvcdoc.Content',
 		
 	},
 	"{clientState} who change" : function(clientState, ev, attr, how, val){
+		this._currentPage = val;
 		// write out who this is
 		if( how === "remove" ) {
 			// we should search for 'home'
@@ -49,6 +50,8 @@ $.Controller('Jmvcdoc.Content',
 	show : function(docData){
 		this.element.html("//jmvcdoc/content/views/" + docData.type.toLowerCase() + ".ejs", docData, DocumentationHelpers)
 			.trigger("docUpdated",[docData]);
+		$('#results a.open').removeClass('open')
+		$('#results a[href="#&who='+this._currentPage+'"]').addClass('open');
 	}
 })
 
