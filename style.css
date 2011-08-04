@@ -665,7 +665,7 @@ iframe {
 	text-shadow: 0px -1px #000;
 }
 #defaults .menuSpan {
-	margin-left:10px;
+	padding-left:10px;
 	padding-right:10px;
 }
 #defaults .menuLink:hover,
@@ -673,8 +673,16 @@ iframe {
 }
 #defaults .menuLink:hover .menuSpan,
 #defaults .menuLink:hover span.red {
-	background-position:100% 0;
-	color:#FFFFFF;
+	background-color: #899d09;
+	color: white;
+	-webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  text-shadow: 0px 1px #333;
+  -webkit-box-shadow: 0px 1px 0px 0px #003f2f;
+  -moz-box-shadow: 0px 1px 0px 0px #003f2f;
+  box-shadow: 0px 1px 0px 0px #003f2f;
+  
 }
 #defaults .ui-sub-menu {
 	padding: 5px;	
