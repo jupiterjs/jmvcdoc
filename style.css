@@ -198,6 +198,7 @@ h5 {
 	/*background-color:rgb(239,242,213);*/
     overflow: auto;
     margin-right: 20px;
+    margin-bottom: 20px;
 }
 #nav a {
     display: block;
@@ -385,6 +386,7 @@ pre {
 	-webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  clear: both;
 }
 #low a{
     color: #666;
