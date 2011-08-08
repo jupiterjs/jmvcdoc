@@ -3,7 +3,8 @@ steal(
 	'jmvcdoc/content',
 	'jmvcdoc/nav',
 	'jmvcdoc/search',
-	'jquery/lang/deparam'
+	'jquery/lang/deparam',
+	'jquery/dom/route'
 	/*,
 	
 	'jquery/controller/view',
@@ -19,31 +20,20 @@ steal(
 			window.location.hash = "&who=" + pageName
 		}
 	
-	var clientState = new $.Observe({});
-				
-	$('#nav').jmvcdoc_nav({clientState : clientState});
-	$("#doc").jmvcdoc_content({clientState : clientState});
-	$("#search").jmvcdoc_search({clientState : clientState});
+	$.route(":who",{who: "index"});
+	$.route("/search/:search");
+	
+		
+	$('#nav').jmvcdoc_nav();
+	$("#doc").jmvcdoc_content({clientState : $.route.data});
+	$("#search").jmvcdoc_search({clientState : $.route.data});
 	//Doc.location = steal.root.join("jmvc/docs/")
 	
 	
 	
 	Doc.load(function(){
-		
-		var hashchange = function(){
-			var p = window.location.hash.substr(2);
-			var params = $.String.deparam(p || "who=index");
-			
-			clientState.merge(params, true);
-			
-		}
-
-		$(window).bind('hashchange', hashchange)
-		
-		hashchange();
+		$.route.ready();
 	});
-	
-	$("#doc").jmvcdoc_content();
 	
 	
   })

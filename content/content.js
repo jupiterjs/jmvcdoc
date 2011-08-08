@@ -33,12 +33,8 @@ $.Controller('Jmvcdoc.Content',
 	init : function(){
 		
 	},
-	"{clientState} who change" : function(clientState, ev, attr, how, val){
+	"{clientState} who set" : function(clientState, ev, val){
 		// write out who this is
-		if( how === "remove" ) {
-			// we should search for 'home'
-			return;
-		}
 		this.element.html("Loading ...")
 			.scrollTop(0);
 		Doc.findOne({
