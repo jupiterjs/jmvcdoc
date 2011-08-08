@@ -9,10 +9,6 @@
 		 			title = (current.title ? current.title: current.name);
 					res = calculateDisplay(previous, title);
 					name = normalizeName(current.name) %>
-		<div class="topCorner">
-			<div class="right"></div>
-			<div class="left"></div>
-		</div>
 		<div class="content">
 			    <a href="<%=$.route.url({who: name})%>" class='selected choice <%=current.type%>' style="padding-left: <%= res.length * 20%>px">
 			    	<%if(name != "index") { %>
@@ -23,10 +19,6 @@
 				</a>
 				<% previous = title%>
 		</div>
-		<div class="bottomCorner">
-			<div class="right"></div>
-			<div class="left"></div>
-		</div>
 			<% if(i<(selected.length-1)){ %>
 		<div class="spacer"><div>&nbsp;</div></div>
 			<%}%>
@@ -34,10 +26,6 @@
 	</div>
 <%}%>
 <div id='results' style="display: <%= hide? 'none' : 'block'%>">
-	<div class="topCorner">
-		<div class="right"></div>
-		<div class="left"></div>
-	</div>
 	<div class="content">
 	    <% for(var i =0; i < list.length; i++){%>
 			<% current = list[i];
@@ -50,10 +38,6 @@
 			</a>
 			<% previous = title%>
 		<%}%>
-	</div>
-	<div class="bottomCorner">
-		<div class="right"></div>
-		<div class="left"></div>
 	</div>
 </div>
 

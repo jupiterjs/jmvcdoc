@@ -34,6 +34,7 @@ $.Controller('Jmvcdoc.Content',
 		
 	},
 	"{clientState} who set" : function(clientState, ev, val){
+		this._currentPage = val;
 		// write out who this is
 		this.element.html("Loading ...")
 			.scrollTop(0);
@@ -45,6 +46,8 @@ $.Controller('Jmvcdoc.Content',
 	show : function(docData){
 		this.element.html("//jmvcdoc/content/views/" + docData.type.toLowerCase() + ".ejs", docData, DocumentationHelpers)
 			.trigger("docUpdated",[docData]);
+		$('#results a.open').removeClass('open')
+		$('#results a[href="#&who='+this._currentPage+'"]').addClass('open');
 	}
 })
 
