@@ -47,7 +47,7 @@ $.Controller('Jmvcdoc.Content',
 		this.element.html("//jmvcdoc/content/views/" + docData.type.toLowerCase() + ".ejs", docData, DocumentationHelpers)
 			.trigger("docUpdated",[docData]);
 		$('#results a.open').removeClass('open')
-		$('#results a[href="#&who='+this._currentPage+'"]').addClass('open');
+		$('#results a[href="'+location.hash+'"]').addClass('open');
 	}
 })
 
