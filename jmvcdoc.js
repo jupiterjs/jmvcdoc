@@ -3,13 +3,12 @@ steal(
 	'jmvcdoc/content',
 	'jmvcdoc/nav',
 	'jmvcdoc/search',
-	'jquery/lang/deparam',
+	'jquery/lang/string/deparam',
 	'jquery/dom/route'
 	/*,
 	
 	'jquery/controller/view',
 	'jquery/lang/json', 
-	'jquery/lang/deparam',
 	'jquery/dom/cookie',
 	'mxui/layout/positionable'*/
 	).then(function() {
@@ -31,10 +30,10 @@ steal(
 	
 	
 	
+	$.route.ready(false);
 	Doc.load(function(){
-		$.route.ready();
+		$.route.ready(true);
 	});
-	
 	
   })
 /*
