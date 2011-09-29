@@ -3,7 +3,8 @@ steal(
 	'jmvcdoc/content',
 	'jmvcdoc/nav',
 	'jmvcdoc/search',
-	'jquery/dom/route'
+	'jquery/dom/route',
+	'steal/html/client.js'
 	/*,
 	
 	'jquery/controller/view',
@@ -28,10 +29,11 @@ steal(
 	//Doc.location = steal.root.join("jmvc/docs/")
 	
 	
-	
+	steal.html.wait();
 	$.route.ready(false);
 	Doc.load(function(){
 		$.route.ready(true);
+		steal.html.ready();
 	});
 	
   })
