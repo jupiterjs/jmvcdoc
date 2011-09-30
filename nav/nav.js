@@ -67,6 +67,7 @@ $.Controller('Jmvcdoc.Nav',
 		}, DocumentationHelpers);
 		
 		// highlight selected guy ...
+		steal.html.ready();
 		
 	},
 	".remove click" : function(el, ev){

@@ -28,12 +28,9 @@ steal(
 	$("#search").jmvcdoc_search({clientState : $.route.data});
 	//Doc.location = steal.root.join("jmvc/docs/")
 	
-	
-	steal.html.wait();
 	$.route.ready(false);
 	Doc.load(function(){
 		$.route.ready(true);
-		steal.html.ready();
 	});
 	
   })
