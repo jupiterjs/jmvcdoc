@@ -26,9 +26,11 @@ $.Controller('Jmvcdoc.Search',
 	init : function(){
 		this.input.attr('disabled', false)
 	},
-	"input keyup" : function(){
-		clearTimeout(this.searchTimer);
-		this.searchTimer = setTimeout(this.callback('search'),200)
+	"input keyup" : function(el, ev){
+		if(ev.keyCode != 9){
+			clearTimeout(this.searchTimer);
+			this.searchTimer = setTimeout(this.callback('search'),200)
+		}
 	},
 	search : function(){
 		$.route.attrs({
